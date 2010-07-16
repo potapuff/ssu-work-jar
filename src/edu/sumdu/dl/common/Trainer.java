@@ -399,8 +399,8 @@ public class Trainer extends JApplet implements ActionListener,
         setNeedCalc(false);
     }
 
-    JButton saveButton ;
-    JButton loadButton 
+    JButton saveButton;
+    JButton loadButton;
     
     public void initFrames() {
         TaskName = localizer.getMessage("task.name");
