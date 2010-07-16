@@ -399,6 +399,9 @@ public class Trainer extends JApplet implements ActionListener,
         setNeedCalc(false);
     }
 
+    JButton saveButton ;
+    JButton loadButton 
+    
     public void initFrames() {
         TaskName = localizer.getMessage("task.name");
         /** основная панель */
@@ -471,11 +474,11 @@ public class Trainer extends JApplet implements ActionListener,
         newPane.add(solveButton);
 
         if (needSaveLoad) {
-            JButton saveButton = createButton("task.save");
+            saveButton = createButton("task.save");
             saveButton.setActionCommand("save");
             saveButton.addActionListener(this);
             newPane.add(saveButton);
-            JButton loadButton = createButton("task.load");
+            loadButton = createButton("task.load");
             loadButton.setActionCommand("load");
             loadButton.addActionListener(this);
             newPane.add(loadButton);
