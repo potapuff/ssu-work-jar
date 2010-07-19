@@ -3,7 +3,6 @@ package edu.sumdu.dl.common;
 import java.awt.Font;
 import java.util.regex.*;
 
-
 public class DTGreece extends DTLabel {
 
     public DTGreece() {
@@ -17,21 +16,23 @@ public class DTGreece extends DTLabel {
     String gsS;
 
     public void setText(String s) {
-        
-        gsS = s;
-        if (s == null || s.length() == 0) {
-            super.setText(s);
+
+        String t = this.content;
+
+        gsS = t;
+        if (t == null || t.length() == 0) {
+            super.setText(t);
             return;
         }
 
         String s1, s2 = null;
         Pattern p = Pattern.compile("([A-Za-z]+)(\\d+)");
-        Matcher m = p.matcher(s);
+        Matcher m = p.matcher(t);
         if (m.find()) {
             s1 = m.group(1);
             s2 = m.group(2);
         } else {
-            s1 = s;
+            s1 = t;
         }
 
         String[] lets = {
@@ -55,15 +56,15 @@ public class DTGreece extends DTLabel {
         }
 
         if (s2 != null) {
-            super.setText("<html>" + c + "<sub>" + s2 + "</sub></html>");
+            super.setText("<html><p style=\"" + style + "\">" + c + "<sub>" + s2 + "</sub></p></html>");
         } else {
-            super.setText("" + c);
+            super.setText("<html><p style=\"" + style + "\">" + c + "</p></html>");
         }
 
         setFont(new Font("default", Font.BOLD, 14));
     }
 
     public String toXML() {
-        return "<greece>" + gsS + "</greece>";
+        return "<greece style=\"" + style + "\">" + gsS + "</greece>";
     }
 }

@@ -7,8 +7,7 @@ public class DTEvalLabel extends DTLabel implements Updateable {
 
     private XNode node;
     private RuntimeVars runtimeVars;
-    private String style;
-    private String content;
+    
 
     public DTEvalLabel() {
         super();

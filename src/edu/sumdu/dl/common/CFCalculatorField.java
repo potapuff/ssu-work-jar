@@ -6,7 +6,6 @@ import java.awt.event.*;
 import java.util.*;
 import edu.sumdu.dl.calc.*;
 
-// текстовое поле ввода заданных числовых данных, проверка с заданной точностью
 public class CFCalculatorField extends JTextField implements CheckField,
         FocusListener, TStorable, NodeStorable {
 
