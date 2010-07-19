@@ -9,8 +9,6 @@ public class DTLabelI18N extends DTLabel implements TLocalized, Updateable {
     private RuntimeVars runtimeVars;
     private XNode node;
     private Localizer localizer;
-    private String content;
-    private String style;
 
     public DTLabelI18N() {
         super();
