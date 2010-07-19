@@ -86,6 +86,11 @@ public class Console {
         System.out.println();
     }
 
+    /**
+     * Виведення в консоль строки.
+     * @param name назва строки
+     * @param value строка
+     */
     public static void out(String name, String value) {
         System.out.println(name + ":" + value);
     }

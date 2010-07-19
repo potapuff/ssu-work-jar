@@ -11,6 +11,112 @@ public class Array {
 
     /**
      * Сортування за зростанням.
+     * Якщо передаються масиви як список, то кожен із них буде відсортований за
+     * зростанням.
+     * Якщо передається двовимірний масив, то буде відсортовано елементи за зростанням
+     * у кожному з рядків.
+     * <pre>
+     *  int[][] m = {{2, 1}, {891, 4, 7}, {-4, 5, 34}};
+     *  int[] a = {2, -3};
+     *  int[] b = {34, -3, 234};
+     *
+     *  math.Array.sort(a, b);
+     *  math.Array.sort(m);
+
+     *  math.Console.out("a", a);
+     *  math.Console.out("b", b);
+     *  math.Console.out("m", m);
+     * </pre>
+     * @param matrix список масивів, які необхідно відсортувати
+     */
+    public static void sort(int[]... matrix) {
+        for (int[] m : matrix) {
+            sort(m);
+        }
+    }
+
+    /**
+     * Сортування за зростанням.
+     * Якщо передаються масиви як список, то кожен із них буде відсортований за
+     * зростанням.
+     * Якщо передається двовимірний масив, то буде відсортовано елементи за зростанням
+     * у кожному з рядків.
+     * <pre>
+     *  double[][] m = {{2, 1}, {891, 4, 7}, {-4, 5, 34}};
+     *  double[] a = {2, -3};
+     *  double[] b = {34, -3, 234};
+     *
+     *  math.Array.sort(a, b);
+     *  math.Array.sort(m);
+
+     *  math.Console.out("a", a);
+     *  math.Console.out("b", b);
+     *  math.Console.out("m", m);
+     * </pre>
+     * @param matrix список масивів, які необхідно відсортувати
+     */
+    public static void sort(double[]... matrix) {
+        for (double[] m : matrix) {
+            sort(m);
+        }
+    }
+
+    /**
+     * Сортування за спаданням.
+     * Якщо передаються масиви як список, то кожен із них буде відсортований за
+     * спаданням.
+     * Якщо передається двовимірний масив, то буде відсортовано елементи за спаданням
+     * у кожному з рядків.
+     * <pre>
+     *  int[][] m = {{2, 1}, {891, 4, 7}, {-4, 5, 34}};
+     *  int[] a = {2, -3};
+     *  int[] b = {34, -3, 234};
+     *
+     *  math.Array.inverseSort(a, b);
+     *  math.Array.inverseSort(m);
+
+     *  math.Console.out("a", a);
+     *  math.Console.out("b", b);
+     *  math.Console.out("m", m);
+     * </pre>
+     * @param matrix список масивів, які необхідно відсортувати
+     */
+    public static void inverseSort(int[]... matrix) {
+        for (int[] m : matrix) {
+            sort(m);
+            swap(m);
+        }
+    }
+
+    /**
+     * Сортування за зростанням.
+     * Якщо передаються масиви як список, то кожен із них буде відсортований за
+     * зростанням.
+     * Якщо передається двовимірний масив, то буде відсортовано елементи за зростанням
+     * у кожному з рядків.
+     * <pre>
+     *  double[][] m = {{2, 1}, {891, 4, 7}, {-4, 5, 34}};
+     *  double[] a = {2, -3};
+     *  double[] b = {34, -3, 234};
+     *
+     *  math.Array.inverseSort(a, b);
+     *  math.Array.inverseSort(m);
+
+     *  math.Console.out("a", a);
+     *  math.Console.out("b", b);
+     *  math.Console.out("m", m);
+     * </pre>
+     * @param matrix список масивів, які необхідно відсортувати
+     */
+    public static void inverseSort(double[]... matrix) {
+        for (double[] m : matrix) {
+            sort(m);
+            swap(m);
+        }
+    }
+
+    /**
+     * Сортування за зростанням.
      * @param array вихідний масив
      */
     public static void sort(int... array) {
@@ -248,8 +354,8 @@ public class Array {
      */
     public static int sum(int... array) {
         int s = 0;
-        for (int i = 0; i < array.length; i++) {
-            s += array[i];
+        for (int a : array) {
+            s += a;
         }
         return s;
     }
@@ -261,8 +367,8 @@ public class Array {
      */
     public static double sum(double... array) {
         double s = 0;
-        for (int i = 0; i < array.length; i++) {
-            s += array[i];
+        for (double a : array) {
+            s += a;
         }
         return s;
     }
@@ -296,6 +402,7 @@ public class Array {
         for (int i = 0; i < a.length; i++) {
             res[i] = a[i] + b[i];
         }
+
         return res;
     }
 
@@ -314,11 +421,11 @@ public class Array {
     }
 
     /**
-           * Додавання до кожного елементу масиву числа.
-           * @param array вихідний масив
-           * @param value число, яке додаємо
-           * @return новий масив
-           */
+     * Додавання до кожного елементу масиву числа.
+     * @param array вихідний масив
+     * @param value число, яке додаємо
+     * @return новий масив
+     */
     public static int[] summate(int[] array, int value) {
         int[] res = new int[array.length];
         for (int i = 0; i < array.length; i++) {
@@ -328,11 +435,11 @@ public class Array {
     }
 
     /**
-           * Додавання до кожного елементу масиву числа.
-           * @param array вихідний масив
-           * @param value число, яке додаємо
-           * @return новий масив
-           */
+     * Додавання до кожного елементу масиву числа.
+     * @param array вихідний масив
+     * @param value число, яке додаємо
+     * @return новий масив
+     */
     public static double[] summate(double[] array, double value) {
         double[] res = new double[array.length];
         for (int i = 0; i < array.length; i++) {
@@ -342,11 +449,11 @@ public class Array {
     }
 
     /**
-           * Віднімання від кожного елементу масиву числа.
-           * @param array вихідний масив
-           * @param value число, яке віднімаємо
-           * @return новий масив
-           */
+     * Віднімання від кожного елементу масиву числа.
+     * @param array вихідний масив
+     * @param value число, яке віднімаємо
+     * @return новий масив
+     */
     public static int[] subtract(int[] array, int value) {
         int[] res = new int[array.length];
         for (int i = 0; i < array.length; i++) {
@@ -356,11 +463,11 @@ public class Array {
     }
 
     /**
-           * Віднімання від кожного елементу масиву числа.
-           * @param array вихідний масив
-           * @param value число, яке віднімаємо
-           * @return новий масив
-           */
+     * Віднімання від кожного елементу масиву числа.
+     * @param array вихідний масив
+     * @param value число, яке віднімаємо
+     * @return новий масив
+     */
     public static double[] subtract(double[] array, double value) {
         double[] res = new double[array.length];
         for (int i = 0; i < array.length; i++) {
@@ -520,11 +627,11 @@ public class Array {
     }
 
     /**
-           * Повертає індекс числа в масиві за значенням.
-           * @param a вихідний масив
-           * @param value число, індекс якого шукаємо
-           * @return індекс числа в масиві, якщо таке присутнє в ньому, інакше повертає -1
-           */
+     * Повертає індекс числа в масиві за значенням.
+     * @param a вихідний масив
+     * @param value число, індекс якого шукаємо
+     * @return індекс числа в масиві, якщо таке присутнє в ньому, інакше повертає -1
+     */
     private static int getIndex(double[] a, double value) {
         for (int i = 0; i < a.length; i++) {
             if (Value.diff(a[i], value, 0.0001)) {

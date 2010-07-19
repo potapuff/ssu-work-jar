@@ -21,4 +21,13 @@ public class Value {
     public static int toInt(double value) {
         return Double.valueOf(value).intValue();
     }
+
+    /**
+     * Отримання дійсного числа із строки
+     * @param str строка із числом дійсного типу
+     * @return число дійсного типу
+     */
+    public static double toDouble(String str) {
+        return Double.valueOf(str);
+    }
 }

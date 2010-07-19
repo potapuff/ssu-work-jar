@@ -89,6 +89,12 @@ public class Matrix {
         return b;
     }
 
+    /**
+     * Знаходження суми матриць А та В
+     * @param a матриця А
+     * @param b матриця В
+     * @return матриця С, яка дорівнює сумі матриць А+В
+     */
     public static int[][] summate(int[][] a, int[][] b) {
         int[][] res = new int[a.length][a[0].length];
         for (int i = 0; i < a.length; i++) {
@@ -99,6 +105,12 @@ public class Matrix {
         return res;
     }
 
+    /**
+     * Знаходження суми матриць А та В
+     * @param a матриця А
+     * @param b матриця В
+     * @return матриця С, яка дорівнює сумі матриць А+В
+     */
     public static double[][] summate(double[][] a, double[][] b) {
         double[][] res = new double[a.length][a[0].length];
         for (int i = 0; i < a.length; i++) {
@@ -109,6 +121,12 @@ public class Matrix {
         return res;
     }
 
+    /**
+     * Знаходження різниці матриць А та В
+     * @param a матриця А
+     * @param b матриця В
+     * @return матриця С, яка дорівнює різниці матриць А-В
+     */
     public static int[][] subtract(int[][] a, int[][] b) {
         int[][] res = new int[a.length][a[0].length];
         for (int i = 0; i < a.length; i++) {
@@ -119,6 +137,12 @@ public class Matrix {
         return res;
     }
 
+    /**
+     * Знаходження різниці матриць А та В
+     * @param a матриця А
+     * @param b матриця В
+     * @return матриця С, яка дорівнює різниці матриць А-В
+     */
     public static double[][] subtract(double[][] a, double[][] b) {
         double[][] res = new double[a.length][a[0].length];
         for (int i = 0; i < a.length; i++) {
@@ -129,6 +153,12 @@ public class Matrix {
         return res;
     }
 
+    /**
+     * Добуток матриці на число
+     * @param a матриця А
+     * @param value число на яке множиться матриця
+     * @return матриця
+     */
     public static int[][] multiply(int[][] a, int value) {
         int[][] res = new int[a.length][a[0].length];
         for (int i = 0; i < a.length; i++) {
@@ -139,6 +169,12 @@ public class Matrix {
         return res;
     }
 
+    /**
+     * Добуток матриці на число
+     * @param a матриця А
+     * @param value число на яке множиться матриця
+     * @return матриця
+     */
     public static double[][] multiply(double[][] a, double value) {
         double[][] res = new double[a.length][a[0].length];
         for (int i = 0; i < a.length; i++) {
@@ -149,15 +185,17 @@ public class Matrix {
         return res;
     }
 
+    /*
     public static int[][] multiply(int[][] a, int[][] b) {
-        int[][] res = new int[a.length][b[0].length];
-        //...
-        return res;
+    int[][] res = new int[a.length][b[0].length];
+    //...
+    return res;
     }
 
     public static double[][] multiply(double[][] a, double[][] b) {
-        double[][] res = new double[a.length][b[0].length];
-        //...
-        return res;
+    double[][] res = new double[a.length][b[0].length];
+    //...
+    return res;
     }
+     */
 }
