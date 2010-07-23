@@ -1,6 +1,7 @@
 package math;
 
 import java.util.Random;
+import java.math.*;
 
 /**
  * Надає методи для генерування випадкових чисел.
@@ -35,13 +36,11 @@ public class Randomizer {
      * @param min нижня границя діапазону
      * @param max верхня границя діапазону
      * @param step крок
+     * @param n округлення до n знаків після точки
      * @return випадкове число
      */
-    public static double getDouble(double min, double max, double step) {
-        return (double) getInt(
-                Math.round((float) min * 10),
-                1 + Math.round((float) max * 10),
-                Math.round((float) step * 10)) / 10;
+    public static double getDouble(double min, double max, double step, int n) {   
+        return Round.round(min + getInt(0, Value.toInt((max - min) / step)) * step, n);
     }
 
     /**
@@ -66,12 +65,13 @@ public class Randomizer {
      * @param max верхня границя діапазону
      * @param step крок
      * @param count кількість чисел, що необхідно згенерувати
+     * @param n округлення до n знаків після точки
      * @return масив дійсних випадкових чисел
      */
-    public static double[] getDouble(double min, double max, double step, int count) {
+    public static double[] getDouble(double min, double max, double step, int count, int n) {
         double[] a = new double[count];
         for (int i = 0; i < count; i++) {
-            a[i] = getDouble(min, max, step);
+            a[i] = getDouble(min, max, step, n);
         }
         return a;
     }
