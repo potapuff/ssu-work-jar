@@ -185,17 +185,77 @@ public class Matrix {
         return res;
     }
 
-    /*
-    public static int[][] multiply(int[][] a, int[][] b) {
-    int[][] res = new int[a.length][b[0].length];
-    //...
-    return res;
+       /**
+     * Повертає одиничну матрицю E.
+     * @param n розмірність матриці E.
+     * @return одиничну матрицю E.
+     */
+    public static double[][] E(int n) {
+        double[][] E = new double[n][n];
+        for (int i = 0; i < n; i++) {
+            E[i][i] = 1;
+        }
+        return E;
     }
 
-    public static double[][] multiply(double[][] a, double[][] b) {
-    double[][] res = new double[a.length][b[0].length];
-    //...
-    return res;
-    }
+    /**
+     * Повертає обернену матрицю.
+     * @param A вихідна матриця.
+     * @return обернена матриця до матриці А.
      */
+    public static double[][] mobr(double[][] A) {
+        double[][] B = E(A.length);
+        for (int k = 0; k < A.length; k++) {
+            double buf = A[k][k];
+            for (int i = 0; i < A.length; i++) {
+                A[k][i] /= buf;
+                B[k][i] /= buf;
+            }
+            for (int i = k + 1; i < A.length; i++) {
+                buf = A[i][k];
+                for (int j = 0; j < A.length; j++) {
+                    A[i][j] += -buf * A[k][j];
+                    B[i][j] += -buf * B[k][j];
+                }
+            }
+        }
+        for (int k = A.length - 1; k > 0; k--) {
+            double buf = A[k][k];
+            for (int i = 0; i < A.length; i++) {
+                A[k][i] /= buf;
+                B[k][i] /= buf;
+            }
+            for (int i = A.length + (k - A.length - 1); i >= 0; i--) {
+                buf = A[i][k];
+                for (int j = 0; j < A.length; j++) {
+                    A[i][j] += -buf * A[k][j];
+                    B[i][j] += -buf * B[k][j];
+                }
+            }
+        }
+        return B;
+    }
+
+    /**
+     * Добуток матриць С=A*B.
+     * @param a матриця A.
+     * @param b матриця B.
+     * @return матриця С.
+     */
+    public static double[][] multiply(double[][] a, double[][] b) {
+        int n = a.length;
+        int m = b[0].length;
+        double[][] c = new double[n][m];
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                for (int k = 0; k < b.length; k++) {
+                    c[i][j] += a[i][k] * b[k][j];
+                }
+            }
+        }
+
+        return c;
+    }
+
 }
