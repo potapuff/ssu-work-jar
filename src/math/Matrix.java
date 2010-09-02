@@ -254,7 +254,6 @@ public class Matrix {
                 }
             }
         }
-
         return c;
     }
 
