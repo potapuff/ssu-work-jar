@@ -398,10 +398,8 @@ public class Trainer extends JApplet implements ActionListener,
         u_height = 200;
         setNeedCalc(false);
     }
-
     public JButton saveButton;
     public JButton loadButton;
-
 
     public void initFrames() {
         TaskName = localizer.getMessage("task.name");
@@ -626,7 +624,7 @@ public class Trainer extends JApplet implements ActionListener,
         ((javax.swing.plaf.basic.BasicInternalFrameUI) solveFrame.getUI()).setNorthPane(null);
         taskFrame.setBorder(BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED));
         solveFrame.setBorder(BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED));
-        NewVariant();        
+        NewVariant();
     }
 
     /*
@@ -902,6 +900,7 @@ public class Trainer extends JApplet implements ActionListener,
             public void run() {
 
                 URL next_try_url, next_step_url, url3;
+
                 try {
                     next_try_url = new URL(getCodeBase(),
                             getParameter("next_try_url"));
@@ -911,6 +910,7 @@ public class Trainer extends JApplet implements ActionListener,
                     dialogs.stopWaitDialog();
                     return;
                 }
+
                 try {
 
                     int KS = cur >= stepAmount ? stepAmount - 1 : cur + offByOne;
@@ -920,41 +920,46 @@ public class Trainer extends JApplet implements ActionListener,
                         url3 = next_step_url;
                     }
                     new_trial = false;
+
+
+
                     final StringBuffer bf = new StringBuffer();
 
-                    bf.append("task_image=");
+
+                    String usedHelpString = "";
+                    if (helpUsed) {
+                        bf.append("had_help_request=true");
+                        bf.append("&help_request=" + URLEncoder.encode(last_help_message, "UTF8"));
+                        last_help_message = "";
+                        helpUsed = false;
+                    }
+
+
+                    if (cur >= stepAmount) {
+                        bf.append("&correct=1");
+                        bf.append("&message=" + URLEncoder.encode("Задача решена полностью" + usedHelpString, "UTF8"));
+                    } else {
+                        bf.append("&message=" + URLEncoder.encode("Выполнено " + cur + " из " + stepAmount + " шагов" + usedHelpString, "UTF8"));
+                    }
+
+
+                    bf.append("&step=" + cur);
+                    bf.append("&total=" + stepAmount);
+                    bf.append("&try_num=" + try_num);
+                    bf.append("&report_html=" + URLEncoder.encode(getReportHtml(), "UTF8"));
+                    bf.append("&data_map=" + URLEncoder.encode(xmlDump, "UTF8"));
+                    bf.append("&done=" + trainerDoneValue);
+
+
+                    bf.append("&task_image=");
                     bf.append(URLEncoder.encode(new String(Base64.encode(com.keypoint.PngEncoderB.dumpComponentImage(uslovie.getContent()))), "UTF8"));
                     if (KS >= 0) {
                         bf.append("&step_image=");
                         bf.append(URLEncoder.encode(new String(Base64.encode(com.keypoint.PngEncoderB.dumpComponentImage(step[KS].getContent()))), "UTF8"));
                     }
-                    String usedHelpString = "";
-                    if (helpUsed) {
-                        bf.append("&had_help_request=true");
-                        bf.append("&help_request="
-                                + URLEncoder.encode(last_help_message, "UTF8"));
-                        last_help_message = "";
-                        helpUsed = false;
-                    }
-                    if (cur >= stepAmount) {
-                        bf.append("&correct=1");
-                        bf.append("&message="
-                                + URLEncoder.encode("Задача решена полностью"
-                                + usedHelpString, "UTF8"));
-                    } else {
-                        bf.append("&message="
-                                + URLEncoder.encode("Выполнено " + cur + " из "
-                                + stepAmount + " шагов"
-                                + usedHelpString, "UTF8"));
-                    }
-                    bf.append("&step=" + cur);
-                    bf.append("&total=" + stepAmount);
-                    bf.append("&try_num=" + try_num);
-                    bf.append("&report_html="
-                            + URLEncoder.encode(getReportHtml(), "UTF8"));
-                    bf.append("&data_map="
-                            + URLEncoder.encode(xmlDump, "UTF8"));
-                    bf.append("&done=" + trainerDoneValue);
+
+
+
 
                     URLConnection connection = url3.openConnection();
                     connection.setDoOutput(true);
@@ -962,6 +967,10 @@ public class Trainer extends JApplet implements ActionListener,
                     OutputStream out = connection.getOutputStream();
                     out.write(bf.toString().getBytes("UTF8"));
                     InputStream in = connection.getInputStream();
+
+
+
+
 
 
 
@@ -1147,15 +1156,15 @@ public class Trainer extends JApplet implements ActionListener,
     }
 
     /** Создать задание */
-    public void generateTask() {       
+    public void generateTask() {
     }
 
     /** Провести дополнительные действия после восстановления состояния */
-    public void afterRestore() {        
+    public void afterRestore() {
     }
 
     /** Действия по выполнению шага */
-    public void stepDone(int stepNumber) {     
+    public void stepDone(int stepNumber) {
     }
     public int WARN_FAIL_LEVEL = 5;
 
