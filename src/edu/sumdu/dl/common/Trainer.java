@@ -877,54 +877,41 @@ public class Trainer extends JApplet implements ActionListener,
         if (isRunningAsSCO() || standAloneMode) {
             return;
         }
-        String tmpDump;
-
-        if (curStep >= stepAmount)// show wait dialog in last step
-        {
-            dialogs.showWaitDialog();
-        }
-
-        try {
-            tmpDump = xmlEncode(getStateMap());
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            tmpDump = "";
-        }
-
-        final String xmlDump = tmpDump;
 
         SwingUtilities.invokeLater(new Runnable() {
 
-            int cur = curStep;
+            private int cur = curStep;
 
             public void run() {
 
-                URL next_try_url, next_step_url, url3;
 
+
+                String tmpDump;
                 try {
-                    next_try_url = new URL(getCodeBase(),
-                            getParameter("next_try_url"));
-                    next_step_url = new URL(getCodeBase(),
-                            getParameter("next_step_url"));
+                    tmpDump = xmlEncode(getStateMap());
+                } catch (Exception ex) {
+                    //ex.printStackTrace();
+                    System.out.println("xmlEncode trable");
+                    tmpDump = "";
+                }
+
+                final String xmlDump = tmpDump;
+                URL next_try_url, next_step_url, url3;
+                try {
+                    next_try_url = new URL(getCodeBase(), getParameter("next_try_url"));
+                    next_step_url = new URL(getCodeBase(), getParameter("next_step_url"));
                 } catch (Exception e) {
-                    dialogs.stopWaitDialog();
+                    //dialogs.stopWaitDialog();
                     return;
                 }
 
                 try {
-
-                    int KS = cur >= stepAmount ? stepAmount - 1 : cur + offByOne;
-                    if (new_trial) {
-                        url3 = next_try_url;
-                    } else {
-                        url3 = next_step_url;
-                    }
+                    int KS = (cur >= stepAmount) ? stepAmount - 1 : cur + offByOne;
+                    url3 = (new_trial) ? next_try_url : next_step_url;
                     new_trial = false;
 
 
-
                     final StringBuffer bf = new StringBuffer();
-
 
                     String usedHelpString = "";
                     if (helpUsed) {
@@ -960,31 +947,50 @@ public class Trainer extends JApplet implements ActionListener,
 
 
 
-
-                    URLConnection connection = url3.openConnection();
-                    connection.setDoOutput(true);
-
-                    OutputStream out = connection.getOutputStream();
-                    out.write(bf.toString().getBytes("UTF8"));
-                    InputStream in = connection.getInputStream();
+                    boolean done = false;
+                    do {
+                        try {
 
 
+                            if (curStep >= stepAmount) {// show wait dialog in last step
+                                //dialogs.showWaitDialog();
+                            }
+
+                            URLConnection connection = url3.openConnection();
+                            connection.setDoOutput(true);
+
+                            OutputStream out = connection.getOutputStream();
+                            out.write(bf.toString().getBytes("UTF8"));
+                            InputStream in = connection.getInputStream();
 
 
 
+                            //dialogs.stopWaitDialog();
+
+                            String s = "";
+                            int k;
+                            byte buf[] = new byte[1024];
+                            while ((k = in.read(buf)) > 0) {
+                                s += new String(buf, 0, k);
+                            }
+
+                            done = true;
+                        } catch (IOException io) {
+                            int n = JOptionPane.showConfirmDialog(
+                                    frame,
+                                    localizer.getMessage("transfer.msg"),
+                                    localizer.getMessage("transfer.title"),
+                                    JOptionPane.YES_NO_OPTION);
+                            if (n == JOptionPane.NO_OPTION) {
+                                return;
+                            }
+
+                        }
+                    } while (done == false);
 
 
-                    dialogs.stopWaitDialog();
-
-                    String s = "";
-                    int k;
-                    byte buf[] = new byte[1024];
-                    while ((k = in.read(buf)) > 0) {
-                        s += new String(buf, 0, k);
-                    }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-
+                } catch (UnsupportedEncodingException ex) {
+                    //ex.printStackTrace();
                 }
             }
         });
