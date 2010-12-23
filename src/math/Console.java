@@ -4,9 +4,18 @@ package math;
  * Надає методи для виведення різноманітних даних в консоль.
  *
  * @author Eduard Bakhlov
- * @version 1.0
+ * @version 1.1
  */
 public class Console {
+
+    /**
+     * Виведення в консоль бінарного числа.
+     * @param name назва змінної
+     * @param value true або false
+     */
+    public static void out(String name, boolean value) {
+        out(name + ": " + value);
+    }
 
     /**
      * Виведення в консоль цілого числа.
@@ -14,7 +23,7 @@ public class Console {
      * @param value число
      */
     public static void out(String name, int value) {
-        System.out.println(name + ": " + value);
+        out(name + ": " + value);
     }
 
     /**
@@ -23,7 +32,21 @@ public class Console {
      * @param value число
      */
     public static void out(String name, double value) {
-        System.out.println(name + ": " + value);
+        out(name + ": " + value);
+    }
+
+    /**
+     * Виведення в консоль одновимірного масиву бінарних чисел.
+     * @param name назва масиву
+     * @param array масив
+     */
+    public static void out(String name, boolean... array) {
+        outThis(name + ": ");
+
+        for (boolean elem : array) {
+            outThis(elem + "  ");
+        }
+        out();
     }
 
     /**
@@ -31,13 +54,13 @@ public class Console {
      * @param name назва масиву
      * @param array масив
      */
-    public static void out(String name, int[] array) {
-        System.out.print(name + ": ");
+    public static void out(String name, int... array) {
+        outThis(name + ": ");
 
         for (int elem : array) {
-            System.out.print(elem + "  ");
+            outThis(elem + "  ");
         }
-        System.out.println();
+        out();
     }
 
     /**
@@ -45,13 +68,29 @@ public class Console {
      * @param name назва масиву
      * @param array масив
      */
-    public static void out(String name, double[] array) {
-        System.out.print(name + ": ");
+    public static void out(String name, double... array) {
+        outThis(name + ": ");
 
         for (double elem : array) {
-            System.out.print(elem + "  ");
+            outThis(elem + "  ");
         }
-        System.out.println();
+        out();
+    }
+
+    /**
+     * Виведення в консоль двовимірного масиву бінарних чисел.
+     * @param name назва масиву
+     * @param array масив
+     */
+    public static void out(String name, boolean[][] array) {
+        out(name + ": ");
+        for (boolean[] row : array) {
+            for (boolean elem : row) {
+                outThis(elem + "  ");
+            }
+            out();
+        }
+        out();
     }
 
     /**
@@ -60,14 +99,14 @@ public class Console {
      * @param array масив
      */
     public static void out(String name, int[][] array) {
-        System.out.println(name + ": ");
+        out(name + ": ");
         for (int[] row : array) {
             for (int elem : row) {
-                System.out.print(elem + "  ");
+                outThis(elem + "  ");
             }
-            System.out.println();
+            out();
         }
-        System.out.println();
+        out();
     }
 
     /**
@@ -76,14 +115,14 @@ public class Console {
      * @param array масив
      */
     public static void out(String name, double[][] array) {
-        System.out.println(name + ": ");
+        out(name + ": ");
         for (double[] row : array) {
             for (double elem : row) {
-                System.out.print(elem + "  ");
+                outThis(elem + "  ");
             }
-            System.out.println();
+            out();
         }
-        System.out.println();
+        out();
     }
 
     /**
@@ -92,6 +131,43 @@ public class Console {
      * @param value строка
      */
     public static void out(String name, String value) {
-        System.out.println(name + ":" + value);
+        out(name + ": " + value);
+    }
+
+    /**
+     * Виведення в консоль масиву строк.
+     * @param name назва строки
+     * @param value строка
+     */
+    public static void out(String name, String... values) {
+        outThis(name + ": ");
+
+        for (String value : values) {
+            outThis(value + "  ");
+        }
+        out();
+    }
+
+    /**
+     * Виведення в консоль пустої строки.
+     */
+    public static void out() {
+        out("");
+    }
+
+    /**
+     * Виведення в консоль строки.
+     *  @param str строка
+     */
+    public static void out(String str) {
+        System.out.println(str);
+    }
+
+    /**
+     * Виведення в консоль без переносу на нову строку.
+     * @param str
+     */
+    protected static void outThis(String str) {
+        System.out.print(str);
     }
 }
