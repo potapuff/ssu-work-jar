@@ -60,11 +60,12 @@ import java.net.MalformedURLException;
 import java.io.*;
 import javax.swing.text.*;
 import javax.swing.event.*;
-
+import javax.swing.text.html.*;
 /*
  * @version 1.9 06/13/02
  * @author Steve Wilson
  */
+
 public class MetalworksHelp extends JInternalFrame {
 
     public MetalworksHelp() {
@@ -94,8 +95,27 @@ class HtmlPane extends JScrollPane implements HyperlinkListener {
     public HtmlPane(String index) {
         URL url = null;
         try {
+
             url = getClass().getResource(index);
-            html = new JEditorPane(url);
+            html = new JEditorPane();
+
+
+            //для уборки багов с версией 1.6.0_22 и выше
+            html.setEditorKit(new HTMLEditorKit() {
+
+                protected Parser getParser() {
+                    try {
+                        Class c = Class.forName("javax.swing.text.html.parser.ParserDelegator");
+                        Parser defaultParser = (Parser) c.newInstance();
+                        return defaultParser;
+                    } catch (Throwable e) {
+                    }
+                    return null;
+                }
+            });
+
+
+            html.setPage(url);
             html.setEditable(false);
             html.addHyperlinkListener(this);
 

@@ -376,6 +376,7 @@ public class Trainer extends JApplet implements ActionListener,
                 frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             }
         } catch (Exception e) {
+            System.out.println("Trainer.java:379  -" + e.getMessage());
         }
         frame.setVisible(true);
         frame.setContentPane(new JPanel(new BorderLayout()));
@@ -752,6 +753,7 @@ public class Trainer extends JApplet implements ActionListener,
                 }
             }
         } catch (Exception e) {
+            System.out.println("Trainer.java:756  -" + e.getMessage());
         }
         if (langButton != null) {
             langButton.setToolTipText(cur_lang);
@@ -796,6 +798,7 @@ public class Trainer extends JApplet implements ActionListener,
             try {
                 content.setSelectedIndex(k);
             } catch (Exception e1) {
+                System.out.println("Trainer.java:800  -" + e1.getMessage());
             }
         }
     }
@@ -851,7 +854,7 @@ public class Trainer extends JApplet implements ActionListener,
                 sendWhatDone();
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
+            System.out.println("Trainer.java:857  -" + ex.getMessage());
         }
 
     }
@@ -1107,6 +1110,7 @@ public class Trainer extends JApplet implements ActionListener,
             taskFrame.setIcon(false);
             taskFrame.moveToFront();
         } catch (Exception e) {
+            System.out.println("Trainer.java:1113  -" + e.getMessage());
         }
     }
 
@@ -1197,6 +1201,7 @@ public class Trainer extends JApplet implements ActionListener,
                             new URL(getCodeBase(), getParameter("url_theory")),
                             "_blank");
                 } catch (Exception e) {
+                    System.out.println("Trainer.java:1204  -" + e.getMessage());
                 }
             }
         }
@@ -1288,7 +1293,7 @@ public class Trainer extends JApplet implements ActionListener,
                 e.close();
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
+            System.out.println("Trainer.java:1296  -" + ex.getMessage());
         }
     }
 
@@ -1309,7 +1314,7 @@ public class Trainer extends JApplet implements ActionListener,
                 }
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
+            System.out.println("Trainer.java:1316  -" + ex.getMessage());
         }
     }
 
@@ -1339,7 +1344,7 @@ public class Trainer extends JApplet implements ActionListener,
             }
             return null;
         } catch (Exception ex) {
-            ex.printStackTrace();
+            System.out.println("Trainer.java:1347  -" + ex.getMessage());
             return null;
         }
     }
@@ -1350,6 +1355,7 @@ public class Trainer extends JApplet implements ActionListener,
         try {
             return "sco".equals(getParameter("run_mode"));
         } catch (Exception ex) {
+            System.out.println("Trainer.java:1358  -" + ex.getMessage());
             return false;
         }
     }
@@ -1363,7 +1369,7 @@ public class Trainer extends JApplet implements ActionListener,
             pageWindow.call("TrainerReportAndComplete",
                     new String[]{getReportHtml()});
         } catch (Exception ex) {
-            ex.printStackTrace();
+            System.out.println("Trainer.java:1372  -" + ex.getMessage());
         }
     }
     private String helpUrl = "/edu/sumdu/dl/common/help/index.html";
