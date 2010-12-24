@@ -1,7 +1,6 @@
 package math;
 
 import java.util.Random;
-import java.math.*;
 
 /**
  * Надає методи для генерування випадкових чисел.
@@ -9,6 +8,9 @@ import java.math.*;
  * @version 1.0
  */
 public class Randomizer {
+
+    protected Randomizer() {
+    }
 
     /**
      * Генерує випадкове число цілого типу в деякому діапазоні.
@@ -39,7 +41,7 @@ public class Randomizer {
      * @param n округлення до n знаків після точки
      * @return випадкове число
      */
-    public static double getDouble(double min, double max, double step, int n) {   
+    public static double getDouble(double min, double max, double step, int n) {
         return Round.round(min + getInt(0, Value.toInt((max - min) / step)) * step, n);
     }
 
