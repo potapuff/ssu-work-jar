@@ -129,18 +129,18 @@ public class Console {
     }
 
     /**
-     * Виведення в консоль строки.
-     * @param name назва строки
-     * @param value строка
+     * Виведення в консоль рядка.
+     * @param name назва рядка
+     * @param value рядок
      */
     public static void out(String name, String value) {
         out(name + ": " + value);
     }
 
     /**
-     * Виведення в консоль масиву строк.
-     * @param name назва строки
-     * @param value строка
+     * Виведення в консоль масиву рядків.
+     * @param name назва рядка
+     * @param value рядок
      */
     public static void out(String name, String... values) {
         outThis(name + ": ");
@@ -152,22 +152,22 @@ public class Console {
     }
 
     /**
-     * Виведення в консоль пустої строки.
+     * Виведення в консоль пустого рядка.
      */
     public static void out() {
         out("");
     }
 
     /**
-     * Виведення в консоль строки.
-     *  @param str строка
+     * Виведення в консоль рядка.
+     *  @param str рядок
      */
     public static void out(String str) {
         System.out.println(str);
     }
 
     /**
-     * Виведення в консоль без переносу на нову строку.
+     * Виведення в консоль без переносу на новий рядок.
      * @param str
      */
     protected static void outThis(String str) {
