@@ -9,6 +9,9 @@ import java.util.Arrays;
  */
 public class Array {
 
+    protected Array() {
+    }
+
     /**
      * Сортування за зростанням.
      * Якщо передаються масиви як список, то кожен із них буде відсортований за

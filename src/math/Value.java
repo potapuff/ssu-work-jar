@@ -2,6 +2,9 @@ package math;
 
 public class Value {
 
+    protected Value() {
+    }
+
     /**
      * Порівняння двох чисел із абсолютною точністю.
      * @param a перше число

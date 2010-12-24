@@ -7,6 +7,9 @@ package math;
  */
 public class Matrix {
 
+    protected Matrix() {
+    }
+
     /**
      * Знаходить розв'язок системи  за методом Крамера.
      * @param a матриця А (розмірність 2*2)
@@ -185,7 +188,7 @@ public class Matrix {
         return res;
     }
 
-       /**
+    /**
      * Повертає одиничну матрицю E.
      * @param n розмірність матриці E.
      * @return одиничну матрицю E.
@@ -256,6 +259,4 @@ public class Matrix {
         }
         return c;
     }
-    
-
 }

@@ -8,6 +8,9 @@ package math;
  */
 public class Console {
 
+    protected Console() {
+    }
+
     /**
      * Виведення в консоль бінарного числа.
      * @param name назва змінної

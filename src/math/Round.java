@@ -7,6 +7,9 @@ package math;
  */
 public class Round {
 
+    protected Round() {
+    }
+
     /**
      * Округлення числа до n-го знаку.
      * @param value вихідне число
