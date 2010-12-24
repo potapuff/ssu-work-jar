@@ -26,9 +26,10 @@ public class Value {
     }
 
     /**
-     * Отримання дійсного числа із строки
+     * Отримання дійсного числа з рядка
      * @param str строка із числом дійсного типу
      * @return число дійсного типу
+     * @throws NumberFormatException якщо не можливо виділити число з рядка
      */
     public static double toDouble(String str) {
         return Double.valueOf(str);
