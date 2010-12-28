@@ -137,6 +137,7 @@ public class CFCalculatorField extends JTextField implements CheckField,
         DimCalc dc = new DimCalc(formula, new VarTable());
         double val = dc.eval();
 
+        //val = math.Round.round(value, eps); // виводити в компонент округлене число
 
         if (dc.notOK) {
             setToolTipText(dc.errorLine);
@@ -149,6 +150,7 @@ public class CFCalculatorField extends JTextField implements CheckField,
             if (isCorrect()) {
                 setForeground(new Color(20, 200, 20));
                 setBackground(Color.WHITE);
+                setText(String.valueOf(value));
             } else {
                 setForeground(Color.RED);
                 setBackground(new Color(255, 234, 234));
