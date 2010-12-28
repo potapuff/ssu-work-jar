@@ -11,6 +11,16 @@ public class Round {
     }
 
     /**
+     * Округлення числа з точністю.
+     * @param value вихідне число
+     * @param eps точність
+     * @return округлене число
+     */
+    public static double round(double value, double eps) {
+        return (double) Math.round(value / eps) * eps;
+    }
+
+    /**
      * Округлення числа до n-го знаку.
      * @param value вихідне число
      * @param n кількість знаків після точки
