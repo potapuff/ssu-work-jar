@@ -356,9 +356,20 @@ public class Array {
      * @return сума
      */
     public static int sum(int... array) {
+        return sum(array, 0, array.length - 1);
+    }
+
+    /**
+     * Знаходження суми елементів масиву на проміжку.
+     * @param array вихідний масив
+     * @param from початкове положення
+     * @param to кінцеве положення
+     * @return сума
+     */
+    public static int sum(int[] array, int from, int to) {
         int s = 0;
-        for (int a : array) {
-            s += a;
+        for (int i = from; i <= to; i++) {
+            s += array[i];
         }
         return s;
     }
@@ -369,9 +380,20 @@ public class Array {
      * @return сума
      */
     public static double sum(double... array) {
+        return sum(array, 0, array.length - 1);
+    }
+
+    /**
+     * Знаходження суми елементів масиву на проміжку.    
+     * @param array вихідний масив
+     * @param from початкове положення
+     * @param to кінцеве положення
+     * @return сума
+     */
+    public static double sum(double[] array, int from, int to) {
         double s = 0;
-        for (double a : array) {
-            s += a;
+        for (int i = from; i <= to; i++) {
+            s += array[i];
         }
         return s;
     }
