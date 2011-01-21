@@ -140,7 +140,6 @@ public class Console {
     /**
      * Виведення в консоль масиву рядків.
      * @param name назва рядка
-     * @param value рядок
      */
     public static void out(String name, String... values) {
         outThis(name + ": ");
