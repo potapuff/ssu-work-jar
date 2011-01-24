@@ -50,7 +50,7 @@ public class Value {
      * @param value відсоток %
      * @return соті долі
      */
-    public static double fromPct(double value) {
+    public static double fromPercent(double value) {
         return value / 100;
     }
 
@@ -59,7 +59,7 @@ public class Value {
      * @param value cоті доді
      * @return відсоток %
      */
-    public static double toPct(double value) {
+    public static double toPercent(double value) {
         return value * 100;
     }
 
@@ -81,45 +81,45 @@ public class Value {
         return Math.abs(a);
     }
 
-    /**
-     * Знаходження максимуму з двох цілих чмсел
-     * @param a перше чило
-     * @param b друге число
-     * @return максимальне число
-     */
-    public static int max(int a, int b) {
-        return Math.max(a, b);
-    }
+//    /**
+//     * Знаходження максимуму з двох цілих чмсел
+//     * @param a перше чило
+//     * @param b друге число
+//     * @return максимальне число
+//     */
+//    public static int max(int a, int b) {
+//        return Math.max(a, b);
+//    }
+//
+//    /**
+//     * Знаходження максимуму з двох дійсних чмсел
+//     * @param a перше чило
+//     * @param b друге число
+//     * @return максимальне число
+//     */
+//    public static double max(double a, double b) {
+//        return Math.max(a, b);
+//    }
 
-    /**
-     * Знаходження максимуму з двох дійсних чмсел
-     * @param a перше чило
-     * @param b друге число
-     * @return максимальне число
-     */
-    public static double max(double a, double b) {
-        return Math.max(a, b);
-    }
-
-    /**
-     * Знаходження мінімуму з двох цілих чмсел
-     * @param a перше чило
-     * @param b друге число
-     * @return мінімальне число
-     */
-    public static int min(int a, int b) {
-        return Math.min(a, b);
-    }
-
-    /**
-     * Знаходження мінімуму з двох дійсних чмсел
-     * @param a перше чило
-     * @param b друге число
-     * @return мінімальне число
-     */
-    public static double min(double a, double b) {
-        return Math.min(a, b);
-    }
+//    /**
+//     * Знаходження мінімуму з двох цілих чмсел
+//     * @param a перше чило
+//     * @param b друге число
+//     * @return мінімальне число
+//     */
+//    public static int min(int a, int b) {
+//        return Math.min(a, b);
+//    }
+//
+//    /**
+//     * Знаходження мінімуму з двох дійсних чмсел
+//     * @param a перше чило
+//     * @param b друге число
+//     * @return мінімальне число
+//     */
+//    public static double min(double a, double b) {
+//        return Math.min(a, b);
+//    }
     
     public static double sin(double a) {
         return Math.sin(a);
