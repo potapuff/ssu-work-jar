@@ -129,7 +129,7 @@ public class Value {
         return Math.cos(a);
     }
 
-    public static double tan(double a) {
+    public static double tg(double a) {
         return Math.tan(a);
     }
 
@@ -141,7 +141,7 @@ public class Value {
         return Math.acos(a);
     }
 
-    public static double atan(double a) {
+    public static double atg(double a) {
         return Math.atan(a);
     }
 
