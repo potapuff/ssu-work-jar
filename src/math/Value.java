@@ -81,45 +81,6 @@ public class Value {
         return Math.abs(a);
     }
 
-//    /**
-//     * Знаходження максимуму з двох цілих чмсел
-//     * @param a перше чило
-//     * @param b друге число
-//     * @return максимальне число
-//     */
-//    public static int max(int a, int b) {
-//        return Math.max(a, b);
-//    }
-//
-//    /**
-//     * Знаходження максимуму з двох дійсних чмсел
-//     * @param a перше чило
-//     * @param b друге число
-//     * @return максимальне число
-//     */
-//    public static double max(double a, double b) {
-//        return Math.max(a, b);
-//    }
-
-//    /**
-//     * Знаходження мінімуму з двох цілих чмсел
-//     * @param a перше чило
-//     * @param b друге число
-//     * @return мінімальне число
-//     */
-//    public static int min(int a, int b) {
-//        return Math.min(a, b);
-//    }
-//
-//    /**
-//     * Знаходження мінімуму з двох дійсних чмсел
-//     * @param a перше чило
-//     * @param b друге число
-//     * @return мінімальне число
-//     */
-//    public static double min(double a, double b) {
-//        return Math.min(a, b);
-//    }
     /**
      * Знаходження тригонометричного синусу кута
      * @param a кут у радіанах
@@ -188,7 +149,7 @@ public class Value {
      * @param a число, логарифм якого вираховуеться (а > 0)
      * @return значення натурального логарифму числа
      */
-    public static double ln(double a){
+    public static double ln(double a) {
         return Math.log(a);
     }
 
@@ -197,17 +158,18 @@ public class Value {
      * @param a число, логарифм якого вираховуеться (а > 0)
      * @return значення десяткового логарифму числа
      */
-    public static double lg(double a){
+    public static double lg(double a) {
         return Math.log10(a);
     }
+
     /**
      * Знаходження логарифму числа
      * @param a число, логарифм якого вираховуеться (а > 0)
      * @param b основа логарифму
      * @return значення логарифму числа
      */
-    public static double log(double a, int b){
-        return Math.log10(a)/Math.log10(b);
+    public static double log(double a, double b) {
+        return lg(a) / lg(b);
     }
 
     /**
@@ -215,7 +177,7 @@ public class Value {
      * @param a число (a > 0)
      * @return квадратний корінь числа
      */
-    public static double sqrt(double a){
+    public static double sqrt(double a) {
         return Math.sqrt(a);
     }
 
@@ -225,7 +187,7 @@ public class Value {
      * @param b ступінь числа
      * @return число а піднесене до степені b
      */
-    public static double pow(double a, double b){
+    public static double pow(double a, double b) {
         return Math.pow(a, b);
     }
 }
