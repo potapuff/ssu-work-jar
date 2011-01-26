@@ -120,43 +120,111 @@ public class Value {
 //    public static double min(double a, double b) {
 //        return Math.min(a, b);
 //    }
-    
+    /**
+     * Знаходження тригонометричного синусу кута
+     * @param a кут у радіанах
+     * @return синус аргументу
+     */
     public static double sin(double a) {
         return Math.sin(a);
     }
 
+    /**
+     * Знаходження тригонометричного косинусу кута
+     * @param a кут у радіанах
+     * @return косинус аргументу
+     */
     public static double cos(double a) {
         return Math.cos(a);
     }
 
+    /**
+     * Знаходження тригонометричного тангенса кута
+     * @param a кут у радіанах
+     * @return тангенса аргументу
+     */
     public static double tg(double a) {
         return Math.tan(a);
     }
 
+    /**
+     * Знаходження тригонометричного арксинусу кута
+     * @param a кут у радіанах
+     * @return арксинус аргументу
+     */
     public static double asin(double a) {
         return Math.asin(a);
     }
 
+    /**
+     * Знаходження тригонометричного арккосинусу кута
+     * @param a кут у радіанах
+     * @return арккосинус аргументу
+     */
     public static double acos(double a) {
         return Math.acos(a);
     }
 
+    /**
+     * Знаходження тригонометричного арктангенса кута
+     * @param a кут у радіанах
+     * @return арктангенса аргументу
+     */
     public static double atg(double a) {
         return Math.atan(a);
     }
 
+    /**
+     * Знаходження числа Ейлера е, піднесеноно да степені а
+     * @param a степінь числа е
+     * @return число Ейлера
+     */
     public static double exp(double a) {
         return Math.exp(a);
     }
 
-    public static double log(double a){
+    /**
+     * Знаходження натурального логарифму числа
+     * @param a число, логарифм якого вираховуеться (а > 0)
+     * @return значення натурального логарифму числа
+     */
+    public static double ln(double a){
         return Math.log(a);
     }
 
+    /**
+     * Знаходження десяткового логарифму числа
+     * @param a число, логарифм якого вираховуеться (а > 0)
+     * @return значення десяткового логарифму числа
+     */
+    public static double lg(double a){
+        return Math.log10(a);
+    }
+    /**
+     * Знаходження логарифму числа
+     * @param a число, логарифм якого вираховуеться (а > 0)
+     * @param b основа логарифму
+     * @return значення логарифму числа
+     */
+    public static double log(double a, int b){
+        return Math.log10(a)/Math.log10(b);
+    }
+
+    /**
+     * Знаходження квадратного корню числа
+     * @param a число (a > 0)
+     * @return квадратний корінь числа
+     */
     public static double sqrt(double a){
         return Math.sqrt(a);
     }
 
+    /**
+     * Знаходження числа піднесеного до степені
+     * @param a число
+     * @param b ступінь числа
+     * @return число а піднесене до степені b
+     */
     public static double pow(double a, double b){
         return Math.pow(a, b);
     }
