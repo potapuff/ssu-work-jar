@@ -881,6 +881,7 @@ public class Trainer extends JApplet implements ActionListener,
             return;
         }
 
+       
         SwingUtilities.invokeLater(new Runnable() {
 
             private int cur = curStep;
@@ -891,7 +892,12 @@ public class Trainer extends JApplet implements ActionListener,
 
                 String tmpDump;
                 try {
-                    tmpDump = xmlEncode(getStateMap());
+                    Map map = getStateMap();
+                    map.put("java-version", System.getProperty("java.version"));
+                    map.put("java-vendor", System.getProperty("java.vendor"));
+                   
+
+                    tmpDump = xmlEncode(map);
                 } catch (Exception ex) {
                     //ex.printStackTrace();
                     System.out.println("xmlEncode trable");
