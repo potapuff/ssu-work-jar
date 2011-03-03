@@ -667,4 +667,19 @@ public class Array {
         }
         return -1;
     }
+
+    /**
+     * Метод визначає чи є ціле число одним з елементів масиву
+     * @param n шукане число цілочисельного типу
+     * @param array масив, в якому шукається число
+     * @return одне з логічних значень, залежно від того є число елементом чи ні
+     */
+    public static boolean entry(int n, int[] array) {
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] == n) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

@@ -77,4 +77,27 @@ public class Randomizer {
         }
         return a;
     }
+
+    /**
+     * Генерує масив цілих випадкових чисел, які не повторюються
+     * @param min нижня границя діапазону
+     * @param max верхня границя діапазону
+     * @param step крок
+     * @param count кількість чисел, що необхідно згенерувати
+     * @return масив цілих випадкових чисел , які не повторюються
+     */
+    public static int[] getIntNoRepeat(int min, int max, int step, int count) {
+        int[] a = new int[count];
+        for (int i = 0; i < count; i++) {
+            boolean done = true;
+            while (done) {
+                int v = math.Randomizer.getInt(0, 8);
+                if (!math.Array.entry(v, a)) {
+                    a[i] = v;
+                    done = false;
+                }
+            }
+        }
+        return a;
+    }
 }
