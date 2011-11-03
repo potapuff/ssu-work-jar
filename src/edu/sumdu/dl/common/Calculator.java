@@ -63,7 +63,7 @@ public class Calculator extends JPanel implements ActionListener, KeyListener {
     }
 
     void DoCalc() {
-        buf = inputLine.getText().toLowerCase();
+        buf = inputLine.getText().toLowerCase().replaceAll(",", ".");
         DimCalc dc = new DimCalc(buf, new VarTable());
         errorLine.setText("");
         double vl = dc.eval();

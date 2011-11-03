@@ -132,7 +132,7 @@ public class CFCalculatorField extends JTextField implements CheckField,
     // изменение цвета текста в зависимости от правильности при уходе с поля
     public void focusLost(FocusEvent e) {
 
-        formula = getText();
+        formula = getText().replaceAll(",", ".");
 
         DimCalc dc = new DimCalc(formula, new VarTable());
         double val = dc.eval();

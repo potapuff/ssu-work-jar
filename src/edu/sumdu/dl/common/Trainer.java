@@ -2,6 +2,10 @@ package edu.sumdu.dl.common;
 
 /*$Log: Trainer.java,v $
 
+/* 
+ * Revision 2.1  2011/11/03
+ * Add support ',' in real numbers (in Calculator and CFCalculatorField classes)
+ */
 /*
  * Revision 2.0  2011/10/21  Parkhomchuk
  * added message of check type (manual or avtomatic) with image and tooltip
