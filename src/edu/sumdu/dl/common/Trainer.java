@@ -2,6 +2,13 @@ package edu.sumdu.dl.common;
 
 /*$Log: Trainer.java,v $
 
+/*
+ * Revision 2.0  2011/10/21  Parkhomchuk
+ * added message of check type (manual or avtomatic) with image and tooltip
+ * fixed text of java version label at changing language
+ * set tooltip for change language button
+ * added sending work.jar version to server
+ */
 /* Revision 1.8  2009/10/01 
 /* added importance level support for all steps
 /*added sending done value of trainer after clicking "next" button
@@ -322,6 +329,8 @@ public class Trainer extends JApplet implements ActionListener,
     private int trainerDoneValue = 0;/* 0-100 */
 
     private int importanceLevelSum = -1;
+    
+    private final String workJarVers = "2.0 updated 2011/10/21";
 
     /** установка начальных параметров */
     public void setSizes() {
@@ -401,6 +410,9 @@ public class Trainer extends JApplet implements ActionListener,
     }
     public JButton saveButton;
     public JButton loadButton;
+    private JLabel checkLabel;
+    private String checkMessage;
+    private JLabel jVersLabel;
 
     public void initFrames() {
         TaskName = localizer.getMessage("task.name");
@@ -433,11 +445,12 @@ public class Trainer extends JApplet implements ActionListener,
 
             pn.setBorder(br);
 
-            JLabel msg = new JLabel();
-            msg.setForeground(new Color(51, 51, 51));
+            jVersLabel = new JLabel();
+            jVersLabel.setForeground(new Color(51, 51, 51));
+            jVersLabel.setText(versionMsg);
+            jVersLabel.setIcon(new ImageIcon(this.getClass().getResource(ICONS_PATH + "jupdate.png")));
 
-            pn.add(msg);
-            msg.setText(versionMsg);
+            pn.add(jVersLabel);
             p.add("North", pn);
         }
 
@@ -447,8 +460,33 @@ public class Trainer extends JApplet implements ActionListener,
         JButton but = createButton("task.new");
         newButton = but;
         but.setActionCommand("Restart");
+
+        //нижняя панель условия
+        JPanel southTaskPanel = new JPanel();
+        southTaskPanel.setLayout(new BoxLayout(southTaskPanel, BoxLayout.X_AXIS));
+
         JPanel newPane = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 5));
-        p.add("South", newPane);
+        southTaskPanel.add(newPane);
+
+        try {
+            //создание JLabel для отображения типа проверки
+            String manualCheck = getParameter("manual_check");
+            //1 - ручная проверка, 0 - автоматическая
+            if ("1".equals(manualCheck)) {
+                checkMessage = "manual.check.true";
+                checkLabel = new JLabel(new ImageIcon(this.getClass().getResource(ICONS_PATH + "check1.png")));
+            } else {
+                checkMessage = "manual.check.false";
+                checkLabel = new JLabel(new ImageIcon(this.getClass().getResource(ICONS_PATH + "check0.png")));
+            }
+            checkLabel.setToolTipText(localizer.getMessage(checkMessage));
+            southTaskPanel.add(checkLabel);
+        } catch (Exception ex) {
+            System.out.println("Trainer: cannot get applet parameter 'manual_check'");
+        }
+
+        p.add("South", southTaskPanel);
+
         but.addActionListener(this);
 
         // solveFrame - фрейм решения
@@ -524,11 +562,10 @@ public class Trainer extends JApplet implements ActionListener,
             } else {
                 but = createButton("task.switch.lang_uk");
             }
-            but.setToolTipText(cur_lang);
             langButton = but;
+            but.setToolTipText(localizer.getMessage("cur_lang"));
             but.addActionListener(this);
             but.setActionCommand("RU/UA");
-            langButton.setToolTipText(cur_lang);
             newPane.add(langButton);
         }
 
@@ -755,12 +792,7 @@ public class Trainer extends JApplet implements ActionListener,
         } catch (Exception e) {
             System.out.println("Trainer.java:756  -" + e.getMessage());
         }
-        if (langButton != null) {
-            langButton.setToolTipText(cur_lang);
-        }
-        if (calculator != null) {
-            calculator.setTitle(localizer.getMessage("calculator.title"));
-        }
+
         changeLanguage(cur_lang);
     }
 
@@ -881,23 +913,21 @@ public class Trainer extends JApplet implements ActionListener,
             return;
         }
 
-       
         SwingUtilities.invokeLater(new Runnable() {
 
             private int cur = curStep;
 
             public void run() {
 
-
-
                 String tmpDump;
                 try {
                     Map map = getStateMap();
                     map.put("java-version", System.getProperty("java.version"));
                     map.put("java-vendor", System.getProperty("java.vendor"));
-                   
+                    map.put("work-jar-version", workJarVers);
 
                     tmpDump = xmlEncode(map);
+                    
                 } catch (Exception ex) {
                     //ex.printStackTrace();
                     System.out.println("xmlEncode trable");
@@ -953,9 +983,8 @@ public class Trainer extends JApplet implements ActionListener,
                         bf.append("&step_image=");
                         bf.append(URLEncoder.encode(new String(Base64.encode(com.keypoint.PngEncoderB.dumpComponentImage(step[KS].getContent()))), "UTF8"));
                     }
-
-
-
+                    
+                    
                     boolean done = false;
                     do {
                         try {
@@ -1151,6 +1180,19 @@ public class Trainer extends JApplet implements ActionListener,
         helpFrame.setTitle(localizer.getMessage("help.help.help"));
         uslovie.refreshLanguage(localizer);
         dialogs.initBundle(localizer);
+        if (checkLabel != null) {
+            checkLabel.setToolTipText(localizer.getMessage(checkMessage));
+        }
+        if (jVersLabel != null) {
+            jVersLabel.setText(localizer.getMessage("invalid.java.version") + System.getProperty("java.version"));
+        }
+        if (langButton != null) {
+            langButton.setToolTipText(localizer.getMessage("cur_lang"));
+        }
+        if (calculator != null) {
+            calculator.setTitle(localizer.getMessage("calculator.title"));
+        }
+
         //frame.setTitle(localizer.getMessage("taskname"));
         for (int i = 0; i < stepAmount; i++) {
             step[i].refreshLanguage(localizer);
