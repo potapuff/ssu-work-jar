@@ -91,8 +91,32 @@ public class Randomizer {
         for (int i = 0; i < count; i++) {
             boolean done = true;
             while (done) {
-                int v = math.Randomizer.getInt(0, 8);
-                if (!math.Array.entry(v, a)) {
+                int v = math.Randomizer.getInt(min, max);
+                if (!math.Array.entryInt(v, a)) {
+                    a[i] = v;
+                    done = false;
+                }
+            }
+        }
+        return a;
+    }
+
+    /**
+     * Генерує масив дійсних випадкових чисел, які не повторюються
+     * @param min нижня границя діапазону
+     * @param max верхня границя діапазону
+     * @param step крок
+     * @param count кількість чисел, що необхідно згенерувати
+     * @param n округлення до n знаків після коми
+     * @return масив цілих випадкових чисел , які не повторюються
+     */
+    public static double[] getDoubleNoRepeat(double min, double max, double step, int count, int n) {
+        double[] a = new double[count];
+        for (int i = 0; i < count; i++) {
+            boolean done = true;
+            while (done) {
+                double v = math.Randomizer.getDouble(min, max, step, n);
+                if (!math.Array.entryDouble(v, a)) {
                     a[i] = v;
                     done = false;
                 }
