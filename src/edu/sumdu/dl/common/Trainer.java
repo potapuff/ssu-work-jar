@@ -337,7 +337,7 @@ public class Trainer extends JApplet implements ActionListener,
     private int trainerDoneValue = 0;/* 0-100 */
 
     private int importanceLevelSum = -1;
-    private final String workJarVers = "2.1 updated 2011/11/03";
+    private final String workJarVers = "2.2 updated 2011/02/04";
 
     /** установка начальных параметров */
     public void setSizes() {
@@ -477,14 +477,11 @@ public class Trainer extends JApplet implements ActionListener,
 
         try {
             String manualCheck = getParameter("manual_check");
-            System.out.println("manual_check is not null: " + manualCheck);
             //1 - ручная проверка, 0 - автоматическая, null - не определен
             if ("1".equals(manualCheck)) {
                 checkMessage = "manual.check.true";
-                System.out.println("ICONS_PATH: " + ICONS_PATH + "check1.png");
                 checkLabel = new JLabel(new ImageIcon(this.getClass().getResource(ICONS_PATH + "check1.png")));
             } else {
-                System.out.println("ICONS_PATH: " + ICONS_PATH + "check0.png");
                 checkMessage = "manual.check.false";
                 checkLabel = new JLabel(new ImageIcon(this.getClass().getResource(ICONS_PATH + "check0.png")));
             }
