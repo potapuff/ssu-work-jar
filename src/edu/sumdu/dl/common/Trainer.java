@@ -1,7 +1,11 @@
 package edu.sumdu.dl.common;
 
-/*$Log: Trainer.java,v $
+/*$Log: Trainer.java,v $*/
 
+/*
+ * Revision 2.2  2012/02/03  Parkhomchuk
+ * Fixed bug from revision 2.0 - added 2 images for displaying check type
+ */
 /* 
  * Revision 2.1  2011/11/03
  * Add support ',' in real numbers (in Calculator and CFCalculatorField classes)
@@ -333,8 +337,7 @@ public class Trainer extends JApplet implements ActionListener,
     private int trainerDoneValue = 0;/* 0-100 */
 
     private int importanceLevelSum = -1;
-    
-    private final String workJarVers = "2.0 updated 2011/10/21";
+    private final String workJarVers = "2.1 updated 2011/11/03";
 
     /** установка начальных параметров */
     public void setSizes() {
@@ -473,13 +476,15 @@ public class Trainer extends JApplet implements ActionListener,
         southTaskPanel.add(newPane);
 
         try {
-            //создание JLabel для отображения типа проверки
             String manualCheck = getParameter("manual_check");
-            //1 - ручная проверка, 0 - автоматическая
+            System.out.println("manual_check is not null: " + manualCheck);
+            //1 - ручная проверка, 0 - автоматическая, null - не определен
             if ("1".equals(manualCheck)) {
                 checkMessage = "manual.check.true";
+                System.out.println("ICONS_PATH: " + ICONS_PATH + "check1.png");
                 checkLabel = new JLabel(new ImageIcon(this.getClass().getResource(ICONS_PATH + "check1.png")));
             } else {
+                System.out.println("ICONS_PATH: " + ICONS_PATH + "check0.png");
                 checkMessage = "manual.check.false";
                 checkLabel = new JLabel(new ImageIcon(this.getClass().getResource(ICONS_PATH + "check0.png")));
             }
@@ -931,7 +936,7 @@ public class Trainer extends JApplet implements ActionListener,
                     map.put("work-jar-version", workJarVers);
 
                     tmpDump = xmlEncode(map);
-                    
+
                 } catch (Exception ex) {
                     //ex.printStackTrace();
                     System.out.println("xmlEncode trable");
@@ -987,8 +992,8 @@ public class Trainer extends JApplet implements ActionListener,
                         bf.append("&step_image=");
                         bf.append(URLEncoder.encode(new String(Base64.encode(com.keypoint.PngEncoderB.dumpComponentImage(step[KS].getContent()))), "UTF8"));
                     }
-                    
-                    
+
+
                     boolean done = false;
                     do {
                         try {
