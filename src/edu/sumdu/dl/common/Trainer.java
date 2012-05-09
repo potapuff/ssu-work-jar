@@ -3,6 +3,11 @@ package edu.sumdu.dl.common;
 /*$Log: Trainer.java,v $*/
 
 /*
+ * Revision 2.3  2012/05/09  Parkhomchuk
+ * Fixed sending data to server (final result of trainer)
+ * Icon of automatic check type should not display (only manual)
+ */
+/*
  * Revision 2.2  2012/02/03  Parkhomchuk
  * Fixed bug from revision 2.0 - added 2 images for displaying check type
  */
@@ -337,7 +342,7 @@ public class Trainer extends JApplet implements ActionListener,
     private int trainerDoneValue = 0;/* 0-100 */
 
     private int importanceLevelSum = -1;
-    private final String workJarVers = "2.2 updated 2011/02/04";
+    private final String workJarVers = "2.3 updated 2011/05/09";
 
     /** установка начальных параметров */
     public void setSizes() {
@@ -481,12 +486,12 @@ public class Trainer extends JApplet implements ActionListener,
             if ("1".equals(manualCheck)) {
                 checkMessage = "manual.check.true";
                 checkLabel = new JLabel(new ImageIcon(this.getClass().getResource(ICONS_PATH + "check1.png")));
-            } else {
+                checkLabel.setToolTipText(localizer.getMessage(checkMessage));
+                southTaskPanel.add(checkLabel);
+            } /*else {
                 checkMessage = "manual.check.false";
                 checkLabel = new JLabel(new ImageIcon(this.getClass().getResource(ICONS_PATH + "check0.png")));
-            }
-            checkLabel.setToolTipText(localizer.getMessage(checkMessage));
-            southTaskPanel.add(checkLabel);
+            }*/
         } catch (Exception ex) {
             System.out.println("Trainer: cannot get applet parameter 'manual_check'");
         }
@@ -507,6 +512,7 @@ public class Trainer extends JApplet implements ActionListener,
         solveButton = createButton("task.solve.it");
         solveButton.addActionListener(new ActionListener() {
 
+            @Override
             public void actionPerformed(ActionEvent e) {
                 solveFrame.setVisible(true);
                 solveButton.setEnabled(false);
@@ -584,7 +590,7 @@ public class Trainer extends JApplet implements ActionListener,
         if (needCalc) {
             JPanel pl = new JPanel(new BorderLayout());
             pl.add(commandPanel);
-            Calculator calculator = new Calculator();
+            calculator = new Calculator();
             calculator.setTitle(localizer.getMessage("calculator.title"));
             pl.add(calculator, "South");
             commandPanel = pl;
@@ -599,7 +605,8 @@ public class Trainer extends JApplet implements ActionListener,
         }
         this.step[stepindex - 1].setImportanceLevel(il);
     }
-    public static Hashtable<String, String> icons = new Hashtable<String, String>();
+    
+    public static final Hashtable<String, String> icons = new Hashtable<String, String>();
 
     static {
         icons.put("task.help", "help_tutor.png");
@@ -647,6 +654,7 @@ public class Trainer extends JApplet implements ActionListener,
     public JButton nextButton, newButton, helpButton, userHelpButton,
             langButton, ptfButton, solveButton;
 
+    @Override
     public void init() {
         setDefaultSize();
         if (stepAmount <= 0) {
@@ -662,7 +670,7 @@ public class Trainer extends JApplet implements ActionListener,
         dialogs.initBundle(localizer);
         fullTask = new RuntimeVars();
 
-        fullTask.setVar("the_applet_is_running", new Boolean(true));
+        fullTask.setVar("the_applet_is_running", Boolean.TRUE);
         initFrames();
         ((javax.swing.plaf.basic.BasicInternalFrameUI) taskFrame.getUI()).setNorthPane(null);
         ((javax.swing.plaf.basic.BasicInternalFrameUI) solveFrame.getUI()).setNorthPane(null);
@@ -675,31 +683,39 @@ public class Trainer extends JApplet implements ActionListener,
      * вся нижеследующая лабуда для корректного отображения условия во время
      * решения
      */
+    @Override
     public void internalFrameClosing(InternalFrameEvent e) {
     }
 
+    @Override
     public void internalFrameClosed(InternalFrameEvent e) {
     }
 
+    @Override
     public void internalFrameOpened(InternalFrameEvent e) {
     }
 
+    @Override
     public void internalFrameIconified(InternalFrameEvent e) {
     }
 
+    @Override
     public void internalFrameDeiconified(InternalFrameEvent e) {
     }
 
+    @Override
     public void internalFrameDeactivated(InternalFrameEvent e) {
     }
 
     // если активировали фрейм решения, то показать и фрейм условия
+    @Override
     public void internalFrameActivated(InternalFrameEvent e) {
         taskShown = false;
         Umova();
     }
 
     // реакция на кнопки
+    @Override
     public void actionPerformed(ActionEvent e) {
         String s = e.getActionCommand();
         if (s.equals("Next")) // попытка пройти к cледующему шагу
@@ -725,15 +741,19 @@ public class Trainer extends JApplet implements ActionListener,
                 stepDone(curStep);
                 curStep++;
                 updateElements();
-                sendWhatDone(-1);
+                String response = sendWhatDone(-1);
                 if (curStep < stepAmount) {
-
                     // переход к следующую закладку
                     content.setEnabledAt(content.indexOfComponent(step_panels[curStep]), true);
                     content.setSelectedIndex(content.indexOfComponent(step_panels[curStep]));
                 } else {
-                    // все шаги выполнены! 
-                    GameOver();
+                    // все шаги выполнены!
+                    if ("OK".equals(response)) {
+                        System.out.println("GAME OVER :)");
+                        GameOver();
+                    } else {
+                        System.out.println("INCORRECT RESPONSE: " + response);
+                    }
                 }
             } else {
                 sendWhatDone();
@@ -815,6 +835,7 @@ public class Trainer extends JApplet implements ActionListener,
             stepPos = step_pos;
         }
 
+        @Override
         public void actionPerformed(ActionEvent e) {
             which.remove(this);
             int newPos = 0;
@@ -898,7 +919,7 @@ public class Trainer extends JApplet implements ActionListener,
     }
 
     public String getDump() {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         DumpSwing.clearImageList();
         buf.append(DumpSwing.dump(uslovie.getContent()));
         for (int i = 0; i <= curStep && i < stepAmount; i++) {
@@ -909,136 +930,121 @@ public class Trainer extends JApplet implements ActionListener,
     }
 
     public void sendWhatDone() {
-        sendWhatDone(0);
+        SwingUtilities.invokeLater(new Runnable() {
+
+            @Override
+            public void run() {
+                sendWhatDone(0);
+            }
+        });
     }
     JLabel textLab;
 
-    public void sendWhatDone(final int offByOne) {
+    public String sendWhatDone(final int offByOne) {
 
         if (isRunningAsSCO() || standAloneMode) {
-            return;
+            return "ELONE_MODE";
         }
 
-        SwingUtilities.invokeLater(new Runnable() {
+        int cur = curStep;
+        String serverResponse = "";
 
-            private int cur = curStep;
+        try {
+            Map map = getStateMap();
 
-            public void run() {
+            map.put("java-version", System.getProperty("java.version"));
+            map.put("java-vendor", System.getProperty("java.vendor"));
+            map.put("work-jar-version", workJarVers);
 
-                String tmpDump;
-                try {
-                    Map map = getStateMap();
-                    map.put("java-version", System.getProperty("java.version"));
-                    map.put("java-vendor", System.getProperty("java.vendor"));
-                    map.put("work-jar-version", workJarVers);
+            String xmlDump = xmlEncode(map);
 
-                    tmpDump = xmlEncode(map);
-
-                } catch (Exception ex) {
-                    //ex.printStackTrace();
-                    System.out.println("xmlEncode trable");
-                    tmpDump = "";
-                }
-
-                final String xmlDump = tmpDump;
-                URL next_try_url, next_step_url, url3;
-                try {
-                    next_try_url = new URL(getCodeBase(), getParameter("next_try_url"));
-                    next_step_url = new URL(getCodeBase(), getParameter("next_step_url"));
-                } catch (Exception e) {
-                    //dialogs.stopWaitDialog();
-                    return;
-                }
-
-                try {
-                    int KS = (cur >= stepAmount) ? stepAmount - 1 : cur + offByOne;
-                    url3 = (new_trial) ? next_try_url : next_step_url;
-                    new_trial = false;
+            URL next_try_url = new URL(getCodeBase(), getParameter("next_try_url"));
+            URL next_step_url = new URL(getCodeBase(), getParameter("next_step_url"));
 
 
-                    final StringBuffer bf = new StringBuffer();
-
-                    String usedHelpString = "";
-                    if (helpUsed) {
-                        bf.append("had_help_request=true");
-                        bf.append("&help_request=" + URLEncoder.encode(last_help_message, "UTF8"));
-                        last_help_message = "";
-                        helpUsed = false;
-                    }
+            int KS = (cur >= stepAmount) ? stepAmount - 1 : cur + offByOne;
+            URL url3 = (new_trial) ? next_try_url : next_step_url;
+            new_trial = false;
 
 
-                    if (cur >= stepAmount) {
-                        bf.append("&correct=1");
-                        bf.append("&message=" + URLEncoder.encode("Задача решена полностью" + usedHelpString, "UTF8"));
-                    } else {
-                        bf.append("&message=" + URLEncoder.encode("Выполнено " + cur + " из " + stepAmount + " шагов" + usedHelpString, "UTF8"));
-                    }
+            final StringBuffer bf = new StringBuffer();
 
-
-                    bf.append("&step=" + cur);
-                    bf.append("&total=" + stepAmount);
-                    bf.append("&try_num=" + try_num);
-                    bf.append("&report_html=" + URLEncoder.encode(getReportHtml(), "UTF8"));
-                    bf.append("&data_map=" + URLEncoder.encode(xmlDump, "UTF8"));
-                    bf.append("&done=" + trainerDoneValue);
-
-
-                    bf.append("&task_image=");
-                    bf.append(URLEncoder.encode(new String(Base64.encode(com.keypoint.PngEncoderB.dumpComponentImage(uslovie.getContent()))), "UTF8"));
-                    if (KS >= 0) {
-                        bf.append("&step_image=");
-                        bf.append(URLEncoder.encode(new String(Base64.encode(com.keypoint.PngEncoderB.dumpComponentImage(step[KS].getContent()))), "UTF8"));
-                    }
-
-
-                    boolean done = false;
-                    do {
-                        try {
-
-
-                            if (curStep >= stepAmount) {// show wait dialog in last step
-                                //dialogs.showWaitDialog();
-                            }
-
-                            URLConnection connection = url3.openConnection();
-                            connection.setDoOutput(true);
-
-                            OutputStream out = connection.getOutputStream();
-                            out.write(bf.toString().getBytes("UTF8"));
-                            InputStream in = connection.getInputStream();
-
-
-
-                            //dialogs.stopWaitDialog();
-
-                            String s = "";
-                            int k;
-                            byte buf[] = new byte[1024];
-                            while ((k = in.read(buf)) > 0) {
-                                s += new String(buf, 0, k);
-                            }
-
-                            done = true;
-                        } catch (IOException io) {
-                            int n = JOptionPane.showConfirmDialog(
-                                    frame,
-                                    localizer.getMessage("transfer.msg"),
-                                    localizer.getMessage("transfer.title"),
-                                    JOptionPane.YES_NO_OPTION);
-                            if (n == JOptionPane.NO_OPTION) {
-                                return;
-                            }
-
-                        }
-                    } while (done == false);
-
-
-                } catch (UnsupportedEncodingException ex) {
-                    //ex.printStackTrace();
-                }
+            String usedHelpString = "";
+            if (helpUsed) {
+                bf.append("had_help_request=true");
+                bf.append("&help_request=").append(URLEncoder.encode(last_help_message, "UTF8"));
+                last_help_message = "";
+                helpUsed = false;
             }
-        });
 
+            if (cur >= stepAmount) {
+                bf.append("&correct=1");
+                bf.append("&message=").append(URLEncoder.encode("Задача решена полностью" + usedHelpString, "UTF8"));
+            } else {
+                bf.append("&message=").append(URLEncoder.encode("Выполнено " + cur + " из " + stepAmount + " шагов" + usedHelpString, "UTF8"));
+            }
+
+            bf.append("&step=").append(cur);
+            bf.append("&total=").append(stepAmount);
+            bf.append("&try_num=").append(try_num);
+            bf.append("&report_html=").append(URLEncoder.encode(getReportHtml(), "UTF8"));
+            bf.append("&data_map=").append(URLEncoder.encode(xmlDump, "UTF8"));
+            bf.append("&done=").append(trainerDoneValue);
+
+
+            bf.append("&task_image=");
+            bf.append(URLEncoder.encode(new String(Base64.encode(com.keypoint.PngEncoderB.dumpComponentImage(uslovie.getContent()))), "UTF8"));
+            if (KS >= 0) {
+                bf.append("&step_image=");
+                bf.append(URLEncoder.encode(new String(Base64.encode(com.keypoint.PngEncoderB.dumpComponentImage(step[KS].getContent()))), "UTF8"));
+            }
+
+            if (bf.toString().length() > 19) {
+                System.out.println("bf: " + bf.toString().substring(0, 20));
+            } else {
+                System.out.println("bf: " + bf.toString());
+            }
+
+            boolean done = false;
+            do {
+                try {
+
+                    URLConnection connection = url3.openConnection();
+                    connection.setDoOutput(true);
+
+                    OutputStream out = connection.getOutputStream();
+                    out.write(bf.toString().getBytes("UTF8"));
+                    InputStream in = connection.getInputStream();
+
+                    serverResponse = "";
+                    int k;
+                    byte buf[] = new byte[1024];
+                    while ((k = in.read(buf)) > 0) {
+                        serverResponse += new String(buf, 0, k);
+                    }
+
+                    done = true;
+                } catch (IOException io) {
+                    int n = JOptionPane.showConfirmDialog(
+                            frame,
+                            localizer.getMessage("transfer.msg"),
+                            localizer.getMessage("transfer.title"),
+                            JOptionPane.YES_NO_OPTION);
+                    if (n == JOptionPane.NO_OPTION) {
+                        return "ERROR";
+                    }
+                }
+            } while (done == false);
+
+        } catch (MalformedURLException ex) {
+            serverResponse = "ERROR";
+            ex.printStackTrace();
+            dialogs.stopWaitDialog();
+        } catch (UnsupportedEncodingException ex) {
+            serverResponse = "ERROR";
+            ex.printStackTrace();
+        }
+        return serverResponse;
     }
     boolean new_trial = false;
 
@@ -1232,6 +1238,7 @@ public class Trainer extends JApplet implements ActionListener,
     }
     public int WARN_FAIL_LEVEL = 5;
 
+    @Override
     public void checkFailed(FailEvent evt) {
         String message = null;
         boolean oldJump = evt.jump;
@@ -1262,6 +1269,7 @@ public class Trainer extends JApplet implements ActionListener,
 
     }
 
+    @Override
     public void doAlert(String msg, boolean i18n) {
         String message = i18n ? localizer.getMessage(msg) : msg;
         dialogs.MessageDialog(message);
@@ -1409,7 +1417,7 @@ public class Trainer extends JApplet implements ActionListener,
         try {
             return "sco".equals(getParameter("run_mode"));
         } catch (Exception ex) {
-            System.out.println("Trainer.java:1358  -" + ex.getMessage());
+            System.out.println("Trainer: Can't get parameter 'run_mode'");
             return false;
         }
     }
