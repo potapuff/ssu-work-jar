@@ -3,6 +3,11 @@ package edu.sumdu.dl.common;
 /*$Log: Trainer.java,v $*/
 
 /*
+ * Revision 2.4  2012/30/07 Kuts
+ * changed the tooltip text buttons "to help teacher"
+ * changed the text in the help window
+ */
+/*
  * Revision 2.3  2012/05/09  Parkhomchuk
  * Fixed sending data to server (final result of trainer)
  * Icon of automatic check type should not display (only manual)
@@ -342,7 +347,7 @@ public class Trainer extends JApplet implements ActionListener,
     private int trainerDoneValue = 0;/* 0-100 */
 
     private int importanceLevelSum = -1;
-    private final String workJarVers = "2.3 updated 2011/05/09";
+    private final String workJarVers = "2.4 updated 2012/07/30";
 
     /** установка начальных параметров */
     public void setSizes() {
