@@ -760,7 +760,6 @@ public class Trainer extends JApplet implements ActionListener,
                 } else {
                     // все шаги выполнены!
                     if ("OK".equals(response)) {
-                        System.out.println("GAME OVER :)");
                         GameOver();
                     } else {
                         System.out.println("INCORRECT RESPONSE: " + response);
