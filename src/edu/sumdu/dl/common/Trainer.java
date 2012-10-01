@@ -3,6 +3,12 @@ package edu.sumdu.dl.common;
 /*$Log: Trainer.java,v $*/
 
 /*
+ * Revision 2.5  2012/10/01 Parkhomchuk
+ * Changed the tooltip text buttons "to help teacher"
+ * Changed the text in the help window
+ */
+
+/*
  * Revision 2.4  2012/30/07 Kuts
  * changed the tooltip text buttons "to help teacher"
  * changed the text in the help window
@@ -347,7 +353,7 @@ public class Trainer extends JApplet implements ActionListener,
     private int trainerDoneValue = 0;/* 0-100 */
 
     private int importanceLevelSum = -1;
-    private final String workJarVers = "2.4 updated 2012/07/30";
+    private final String workJarVers = "2.5 updated 2012/10/01";
 
     /** установка начальных параметров */
     public void setSizes() {
@@ -910,7 +916,7 @@ public class Trainer extends JApplet implements ActionListener,
 
     public void sendHelpRequest() {
         try {
-            String subj = dialogs.SubjDialog(dialogs.msg("answer.help"),
+            String subj = dialogs.SubjDialog("",
                     dialogs.msg("answer.subj"));
             if (subj != null) {
                 helpUsed = true;
@@ -996,18 +1002,11 @@ public class Trainer extends JApplet implements ActionListener,
             bf.append("&data_map=").append(URLEncoder.encode(xmlDump, "UTF8"));
             bf.append("&done=").append(trainerDoneValue);
 
-
             bf.append("&task_image=");
             bf.append(URLEncoder.encode(new String(Base64.encode(com.keypoint.PngEncoderB.dumpComponentImage(uslovie.getContent()))), "UTF8"));
             if (KS >= 0) {
                 bf.append("&step_image=");
                 bf.append(URLEncoder.encode(new String(Base64.encode(com.keypoint.PngEncoderB.dumpComponentImage(step[KS].getContent()))), "UTF8"));
-            }
-
-            if (bf.toString().length() > 19) {
-                System.out.println("bf: " + bf.toString().substring(0, 20));
-            } else {
-                System.out.println("bf: " + bf.toString());
             }
 
             boolean done = false;
