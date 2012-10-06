@@ -3,11 +3,15 @@ package edu.sumdu.dl.common;
 /*$Log: Trainer.java,v $*/
 
 /*
+ * Revision 2.6  2012/10/07 Parkhomchuk
+ * Changed sequence of steps initializing
+ * Disabled some warnings for local mode
+ */
+/*
  * Revision 2.5  2012/10/01 Parkhomchuk
  * Changed the tooltip text buttons "to help teacher"
  * Changed the text in the help window
  */
-
 /*
  * Revision 2.4  2012/30/07 Kuts
  * changed the tooltip text buttons "to help teacher"
@@ -353,7 +357,7 @@ public class Trainer extends JApplet implements ActionListener,
     private int trainerDoneValue = 0;/* 0-100 */
 
     private int importanceLevelSum = -1;
-    private final String workJarVers = "2.5 updated 2012/10/01";
+    private final String workJarVers = "2.6 updated 2012/10/07";
 
     /** установка начальных параметров */
     public void setSizes() {
@@ -363,12 +367,12 @@ public class Trainer extends JApplet implements ActionListener,
 
     public void setStepAmount(int newSize) {
         stepAmount = newSize;
-        if (step == null) {
-            step = new Step[stepAmount];
-            for (int i = 0; i < stepAmount; i++) {
-                step[i] = new Step();
-            }
-        }
+//        if (step == null) {
+//            step = new Step[stepAmount];
+//            for (int i = 0; i < stepAmount; i++) {
+//                step[i] = new Step();
+//            }
+//        }
     }
 
     public void setTaskSize(int wid, int hei) {
@@ -500,11 +504,13 @@ public class Trainer extends JApplet implements ActionListener,
                 checkLabel.setToolTipText(localizer.getMessage(checkMessage));
                 southTaskPanel.add(checkLabel);
             } /*else {
-                checkMessage = "manual.check.false";
-                checkLabel = new JLabel(new ImageIcon(this.getClass().getResource(ICONS_PATH + "check0.png")));
+            checkMessage = "manual.check.false";
+            checkLabel = new JLabel(new ImageIcon(this.getClass().getResource(ICONS_PATH + "check0.png")));
             }*/
         } catch (Exception ex) {
-            System.out.println("Trainer: cannot get applet parameter 'manual_check'");
+            if (!standAloneMode) {
+                System.out.println("Trainer: cannot get applet parameter 'manual_check'");
+            }
         }
 
         p.add("South", southTaskPanel);
@@ -616,7 +622,6 @@ public class Trainer extends JApplet implements ActionListener,
         }
         this.step[stepindex - 1].setImportanceLevel(il);
     }
-    
     public static final Hashtable<String, String> icons = new Hashtable<String, String>();
 
     static {
@@ -736,13 +741,14 @@ public class Trainer extends JApplet implements ActionListener,
                     importanceLevelSum += st.getImportanceLevel().getLevel();
                 }
             }
+
             int points = 0;
             if (curStep < step.length) {
                 points = (int) Math.round(step[curStep].getDoneRatio()
                         * step[curStep].getImportanceLevel().getLevel() * 10000
                         / importanceLevelSum) / 100;
-
             }
+            
             if (Math.abs(100 - trainerDoneValue - points) <= 2) {
                 points = 100 - trainerDoneValue;
             }
@@ -759,9 +765,10 @@ public class Trainer extends JApplet implements ActionListener,
                     content.setSelectedIndex(content.indexOfComponent(step_panels[curStep]));
                 } else {
                     // все шаги выполнены!
-                    if ("OK".equals(response)) {
+                    if ("OK".equals(response) || (standAloneMode && "ELONE_MODE".equals(response))) {
                         GameOver();
                     } else {
+                        dialogs.ReportErrorMessage(true);
                         System.out.println("INCORRECT RESPONSE: " + response);
                     }
                 }
@@ -1054,8 +1061,8 @@ public class Trainer extends JApplet implements ActionListener,
     // Выбор нового варианта
     public void NewVariant() {
         tune();
+        initSteps();
         generateTask();
-        step = new Step[stepAmount];
         solveButton.setEnabled(true);
         solveFrame.setVisible(false);
         testPassId = "";
@@ -1066,10 +1073,14 @@ public class Trainer extends JApplet implements ActionListener,
         loadTask();
     }
 
-    public void loadTask() {
+    private void initSteps() {
+        step = new Step[stepAmount];
         for (int i = 0; i < stepAmount; i++) {
             step[i] = new Step();
         }
+    }
+
+    public void loadTask() {
         content = new JTabbedPane(JTabbedPane.TOP,
                 JTabbedPane.SCROLL_TAB_LAYOUT);
         is_done_sent = false;
@@ -1420,7 +1431,9 @@ public class Trainer extends JApplet implements ActionListener,
         try {
             return "sco".equals(getParameter("run_mode"));
         } catch (Exception ex) {
-            System.out.println("Trainer: Can't get parameter 'run_mode'");
+            if (!standAloneMode) {
+                System.out.println("Trainer: Can't get parameter 'run_mode'");
+            }
             return false;
         }
     }
