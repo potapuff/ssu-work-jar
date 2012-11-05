@@ -48,7 +48,8 @@ public class CFRadioButton extends JRadioButton implements CheckField,
             } else {
                 setValue(Tool.toBool(val));
             }
-            setText(xnode.getContent());
+            /* setText is not nessesary for <radio> and doesn't work for <i18nradio> */
+//            setText(xnode.getContent());
         }
 
 
