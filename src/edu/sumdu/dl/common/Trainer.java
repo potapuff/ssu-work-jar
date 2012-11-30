@@ -3,6 +3,10 @@ package edu.sumdu.dl.common;
 /*$Log: Trainer.java,v $*/
 
 /*
+ * Revision 2.7  2012/11/30 Parkhomchuk
+ * Added label that displays the number of points
+ */
+/*
  * Revision 2.6  2012/10/07 Parkhomchuk
  * Changed sequence of steps initializing
  * Disabled some warnings for local mode
@@ -337,6 +341,8 @@ public class Trainer extends JApplet implements ActionListener,
     int u_width, u_height;
     /** необходимость калькулятора */
     public boolean needCalc;
+    /** необходимость надписи о набранных баллах */
+    private boolean needShowRes;
     public boolean taskShown;
     /** Calculator field */
     public Calculator calculator;
@@ -356,8 +362,9 @@ public class Trainer extends JApplet implements ActionListener,
     private boolean taskFrameSizedByUser = false;
     private int trainerDoneValue = 0;/* 0-100 */
 
+    private JLabel showResultLabel;
     private int importanceLevelSum = -1;
-    private final String workJarVers = "2.6 updated 2012/10/07";
+    private final String workJarVers = "2.7 updated 2012/11/30";
 
     /** установка начальных параметров */
     public void setSizes() {
@@ -604,6 +611,13 @@ public class Trainer extends JApplet implements ActionListener,
         but.setActionCommand("Help");
         commandPanel.add(but);
 
+        //TODO vlpa
+        if (needShowRes) {
+            showResultLabel = new JLabel("", JLabel.CENTER);
+            setResultLabel(trainerDoneValue);
+            commandPanel.add(showResultLabel);
+        }
+
         if (needCalc) {
             JPanel pl = new JPanel(new BorderLayout());
             pl.add(commandPanel);
@@ -612,6 +626,16 @@ public class Trainer extends JApplet implements ActionListener,
             pl.add(calculator, "South");
             commandPanel = pl;
         }
+    }
+
+    private void setResultLabel(int perc) {
+        if (needShowRes) {
+            showResultLabel.setText(localizer.getMessage("show.res.label.1") + perc + localizer.getMessage("show.res.label.2"));
+        }
+    }
+
+    public void setNeedShowResult(boolean need) {
+        needShowRes = need;
     }
 
     public void setImportanceLevel(int stepindex, ImportanceLevel il) {
@@ -748,7 +772,7 @@ public class Trainer extends JApplet implements ActionListener,
                         * step[curStep].getImportanceLevel().getLevel() * 10000
                         / importanceLevelSum) / 100;
             }
-            
+
             if (Math.abs(100 - trainerDoneValue - points) <= 2) {
                 points = 100 - trainerDoneValue;
             }
@@ -763,9 +787,16 @@ public class Trainer extends JApplet implements ActionListener,
                     // переход к следующую закладку
                     content.setEnabledAt(content.indexOfComponent(step_panels[curStep]), true);
                     content.setSelectedIndex(content.indexOfComponent(step_panels[curStep]));
+                    //обновить надпись о набранных процентах
+                    if (checkServerResponse(response)) {
+                        setResultLabel(trainerDoneValue);
+                    }
                 } else {
                     // все шаги выполнены!
-                    if ("OK".equals(response) || (standAloneMode && "ELONE_MODE".equals(response))) {
+                    if (checkServerResponse(response)) {
+                        //обновить надпись о набранных процентах
+                        setResultLabel(trainerDoneValue);
+                        //вывести окошко с результатом
                         GameOver();
                     } else {
                         dialogs.ReportErrorMessage(true);
@@ -794,6 +825,10 @@ public class Trainer extends JApplet implements ActionListener,
             loadStateMap();
         }
 
+    }
+
+    private boolean checkServerResponse(String response) {
+        return "OK".equals(response) || (standAloneMode && "ELONE_MODE".equals(response));
     }
 
     public void updateElements() {
@@ -1206,6 +1241,7 @@ public class Trainer extends JApplet implements ActionListener,
         helpFrame.setTitle(localizer.getMessage("help.help.help"));
         uslovie.refreshLanguage(localizer);
         dialogs.initBundle(localizer);
+
         if (checkLabel != null) {
             checkLabel.setToolTipText(localizer.getMessage(checkMessage));
         }
@@ -1227,6 +1263,8 @@ public class Trainer extends JApplet implements ActionListener,
                 content.setTitleAt(k, step[i].getTitle());
             }
         }
+
+        setResultLabel(trainerDoneValue);
     }
 
     /** Установить переменную времени выполнения */
