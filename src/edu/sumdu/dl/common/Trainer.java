@@ -3,6 +3,10 @@ package edu.sumdu.dl.common;
 /*$Log: Trainer.java,v $*/
 
 /*
+ * Revision 2.8  2013/02/05 Parkhomchuk
+ * Corrected scoring in case of six/eight steps
+ */
+/*
  * Revision 2.7  2012/11/30 Parkhomchuk
  * Added label that displays the number of points
  */
@@ -364,7 +368,7 @@ public class Trainer extends JApplet implements ActionListener,
 
     private JLabel showResultLabel;
     private int importanceLevelSum = -1;
-    private final String workJarVers = "2.7 updated 2012/11/30";
+    private final String workJarVers = "2.8 updated 2013/02/05";
 
     /** установка начальных параметров */
     public void setSizes() {
@@ -773,7 +777,7 @@ public class Trainer extends JApplet implements ActionListener,
                         / importanceLevelSum) / 100;
             }
 
-            if (Math.abs(100 - trainerDoneValue - points) <= 2) {
+            if (Math.abs(100 - trainerDoneValue - points) <= 4) {
                 points = 100 - trainerDoneValue;
             }
             trainerDoneValue += points;
