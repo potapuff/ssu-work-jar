@@ -3,6 +3,10 @@ package edu.sumdu.dl.common;
 /*$Log: Trainer.java,v $*/
 
 /*
+ * Revision 2.9  2013/02/11 Parkhomchuk
+ * Added support of CSS by <item> elements in <combobox> and <i18ncombobox> components
+ */
+/*
  * Revision 2.8  2013/02/05 Parkhomchuk
  * Corrected scoring in case of six/eight steps
  */
@@ -368,7 +372,7 @@ public class Trainer extends JApplet implements ActionListener,
 
     private JLabel showResultLabel;
     private int importanceLevelSum = -1;
-    private final String workJarVers = "2.8 updated 2013/02/05";
+    private final String workJarVers = "2.9 updated 2013/02/11";
 
     /** установка начальных параметров */
     public void setSizes() {
