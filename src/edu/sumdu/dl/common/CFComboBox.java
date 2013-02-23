@@ -79,7 +79,7 @@ public class CFComboBox extends JComboBox implements CheckField, TStorable,
             Collections.shuffle(myItemsList);
         }
         for (ComboItem ci : myItemsList) {
-            addItem("<html><p style=\"" + ci.getStyle() + "\">" + ci.getContent() + "</p></html>");
+            addItem("<html><p style=\"" + ci.getStyle() + "\">" + Tool.escapeXML(ci.getContent()) + "</p></html>");
         }
     }
 

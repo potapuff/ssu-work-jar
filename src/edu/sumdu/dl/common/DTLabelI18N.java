@@ -7,7 +7,6 @@ import java.util.regex.*;
 public class DTLabelI18N extends DTLabel implements TLocalized, Updateable {
 
     private RuntimeVars runtimeVars;
-    private XNode node;
     private Localizer localizer;
 
     public DTLabelI18N() {
@@ -25,7 +24,6 @@ public class DTLabelI18N extends DTLabel implements TLocalized, Updateable {
         elements.add(this);
         this.runtimeVars = rv;
         this.localizer = localizer;
-        this.node = node;
 
         content = node.getContent().trim();
         style = node.getAttr("style");
