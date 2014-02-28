@@ -1,18 +1,39 @@
 package edu.sumdu.dl.calc;
 
 import edu.sumdu.dl.common.CMath;
+import edu.sumdu.dl.common.Localizer;
+import edu.sumdu.dl.common.TLocalized;
+import java.util.Map;
+import java.util.TreeMap;
 
 /*
-Simple calculator
-e: -p | p | e+p | e-p
-p: t | p*t | p/t
-t: f | t^f
-f: NUM | (e) | func(e) 
+ Simple calculator
+ e: -p | p | e+p | e-p
+ p: t | p*t | p/t
+ t: f | t^f
+ f: NUM | (e) | func(e) 
  */
-public class DimCalc extends Object {
+public class DimCalc {
 
     public String errorLine;
     public boolean notOK;
+    private Localizer localizer;
+    private Map<String, String> calcMessages = new TreeMap<String, String>();
+
+    private void initMessagesMap() {
+        calcMessages.put("calc.message.1", "Нет параметров для функции");
+        calcMessages.put("calc.message.2", "кв. корень из отрицательного");
+        calcMessages.put("calc.message.3", "Вызов select() для неизвестной величины");
+        calcMessages.put("calc.message.4", "Недостаточно параметров вызова ф-и");
+        calcMessages.put("calc.message.5", "Логарифм от отрицательного!");
+        calcMessages.put("calc.message.6", "Неизвестная функция");
+        calcMessages.put("calc.message.7", "нет выражения");
+        calcMessages.put("calc.message.8", "Деление на ноль");
+        calcMessages.put("calc.message.9", "Использована неопределенная величина ");
+        calcMessages.put("calc.message.10", "] пропущена");
+        calcMessages.put("calc.message.11", "')' пропущена");
+        calcMessages.put("calc.message.12", "недопустимый символ");
+    }
 
     DD error(String s) {
         if (errorLine.length() > 0) {
@@ -20,14 +41,14 @@ public class DimCalc extends Object {
         } else {
             errorLine = errorLine + s;
         }
-        errorLine += "\n" + la.getBuf().substring(0, la.getPos()) + "\n";
+        errorLine += " '" + la.getBuf().substring(0, la.getPos()) + "'\n";
         notOK = true;
         return new DD(1.0);
     }
 
     DD calc_func(int tip, DD[] x) {
         if (x[0] == null && tip != LexAnal.FT_SELECT) {
-            return error("Нет параметров для функции");
+            return error(getMessage("calc.message.1"));
         }
         switch (tip) {
             case LexAnal.FT_SQRT:
@@ -35,13 +56,13 @@ public class DimCalc extends Object {
                     x[0].pow(0.5);
                     return x[0];
                 } else {
-                    return error("кв. корень из отрицательного");
+                    return error(getMessage("calc.message.2"));
                 }
             case LexAnal.FT_SELECT:
                 la.eat();
                 DD ret;
                 if (la.cur_tok != LexAnal.VARB || vt.getVar(la.cur_str) == null) {
-                    ret = error("Вызов select() для неизвестной величины");
+                    ret = error(getMessage("calc.message.3"));
                 } else {
                     ret = new DD(vt.getVar(la.cur_str).select(vt));
                 }
@@ -92,39 +113,39 @@ public class DimCalc extends Object {
 
             case LexAnal.FT_CRND:
                 if (x[1] == null) {
-                    return error("Недостаточно параметров вызова ф-и");
+                    return error(getMessage("calc.message.4"));
                 }
                 return new DD(CMath.crandom(x[0].value, x[1].value));
             case LexAnal.FT_NRND:
                 if (x[1] == null || x[2] == null) {
-                    return error("Недостаточно параметров вызова ф-и");
+                    return error(getMessage("calc.message.4"));
                 }
                 return new DD(CMath.nrandom(x[0].value, x[1].value, x[2].value));
             case LexAnal.FT_DIFF:
                 if (x[1] == null || x[2] == null) {
-                    return error("Недостаточно параметров вызова ф-и");
+                    return error(getMessage("calc.message.4"));
                 }
                 return dLogic(CMath.diff(x[0].value, x[1].value, x[2].value));
             case LexAnal.FT_DIFFP:
                 if (x[1] == null || x[2] == null) {
-                    return error("Недостаточно параметров вызова ф-и");
+                    return error(getMessage("calc.message.4"));
                 }
                 return dLogic(CMath.diffp(x[0].value, x[1].value, x[2].value));
             case LexAnal.FT_LN:
                 if (x[0].value < 0) {
-                    return error("Логарифм от отрицательного!");
+                    return error(getMessage("calc.message.5"));
                 } else {
                     return new DD(Math.log(x[0].value));
                 }
             case LexAnal.FT_LG:
                 if (x[0].value < 0) {
-                    return error("Логарифм от отрицательного!");
+                    return error(getMessage("calc.message.5"));
                 } else {
                     return new DD(Math.log(x[0].value) / Math.log(10.0));
                 }
 
             default:
-                return error("Неизвестная функция");
+                return error(getMessage("calc.message.6"));
         }
     }
 
@@ -176,7 +197,7 @@ public class DimCalc extends Object {
     DD simple() {
         DD vl;
         if (la.cur_tok == LexAnal.EOL) {
-            return error("нет выражения");
+            return error(getMessage("calc.message.7"));
         }
         if (la.cur_tok == LexAnal.MINUS) {
             la.eat();
@@ -220,7 +241,7 @@ public class DimCalc extends Object {
                     if (lp.value != 0) {
                         left.div(lp);
                     } else {
-                        return error("Деление на ноль");
+                        return error(getMessage("calc.message.8"));
                     }
                     break;
                 case LexAnal.AND:
@@ -254,7 +275,7 @@ public class DimCalc extends Object {
 
             case LexAnal.VARB:
                 if (!vt.getVar(la.cur_str).isSet()) {
-                    error("Использована неопределенная величина " + la.cur_str);
+                    error(getMessage("calc.message.9" + la.cur_str));
                 }
                 vl = new DD(vt.getVar(la.cur_str));
                 la.eat();
@@ -262,14 +283,14 @@ public class DimCalc extends Object {
             case LexAnal.AVAR:// var[simple]
                 String cv = la.cur_str;
                 if (!vt.getVar(la.cur_str).isSet()) {
-                    error("Использована неопределенная величина " + la.cur_str);
+                    error(getMessage("calc.message.9" + la.cur_str));
                 }
                 la.eat();
                 DD d = simple();
                 if (la.cur_tok == LexAnal.CB) {
                     la.eat();
                 } else {
-                    return error("] пропущена");
+                    return error(getMessage("calc.message.10"));
                 }
                 return new DD(vt.getda(cv, d.value), vt.getVar(cv).varDim);
             case LexAnal.NUM:
@@ -280,7 +301,7 @@ public class DimCalc extends Object {
                 la.eat();
                 vl = expr();
                 if (la.cur_tok != LexAnal.CP) {
-                    return error("')' пропущена");
+                    return error(getMessage("calc.message.11"));
                 }
                 la.eat();
                 return vl;
@@ -296,22 +317,35 @@ public class DimCalc extends Object {
                 }
                 DD ret = calc_func(cuf, params);
                 if (la.cur_tok != LexAnal.CP) {
-                    return error("')' пропущена");
+                    return error(getMessage("calc.message.11"));
                 }
                 la.eat();
                 return ret;
             default:
                 // return new DD(1.0);
-                return error("недопустимый символ");
+                return error(getMessage("calc.message.12"));
         }
     }
     VarTable vt;
     LexAnal la;
     DD last_value;
+    
+    private DimCalc(){
+        initMessagesMap();
+    }
+    
+    public DimCalc(VarTable vart) {
+        this();
+        vt = vart;
+    }
 
     public DimCalc(String formula, VarTable vart) {
+        this(vart);
         la = new LexAnal(formula, vart);
-        vt = vart;
+    }
+    
+    public void setFormula(String formula){
+        la = new LexAnal(formula, vt);
     }
 
     public double eval() {
@@ -322,6 +356,18 @@ public class DimCalc extends Object {
         last_value = expr();
 
         return last_value.value;
+    }
+    
+    private String getMessage(String key) {
+        if (localizer != null) {
+            return localizer.getMessage(key);
+        } else {
+            return calcMessages.get(key);
+        }
+    }
+
+    public void refreshLang(Localizer t) {
+        localizer = t;
     }
 
     class DD {

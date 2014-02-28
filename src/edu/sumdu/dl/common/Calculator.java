@@ -1,6 +1,7 @@
 package edu.sumdu.dl.common;
 
-/** Панель  с калькулятором
+/**
+ * Панель с калькулятором
  *
  */
 import javax.swing.*;
@@ -15,6 +16,8 @@ public class Calculator extends JPanel implements ActionListener, KeyListener {
     JLabel resultLine;
     String buf;
     java.text.NumberFormat formatter = java.text.NumberFormat.getNumberInstance();
+    DimCalc dc;
+    private Localizer localizer;
 
     public Calculator() {
         this("2x2=?");
@@ -56,6 +59,8 @@ public class Calculator extends JPanel implements ActionListener, KeyListener {
         formatter.setMinimumFractionDigits(0);
         formatter.setMaximumFractionDigits(7);
         //formatter.setGroupingUsed(false);
+        
+        dc = new DimCalc(new VarTable());
     }
 
     public void setTitle(String title) {
@@ -64,22 +69,25 @@ public class Calculator extends JPanel implements ActionListener, KeyListener {
 
     void DoCalc() {
         buf = inputLine.getText().toLowerCase().replaceAll(",", ".");
-        DimCalc dc = new DimCalc(buf, new VarTable());
+        dc.setFormula(buf);
         errorLine.setText("");
         double vl = dc.eval();
         if (dc.notOK) {
             errorLine.setText(dc.errorLine);
         }
-
         resultLine.setText("" + formatter.format(vl));
     }
 
-    /** обработка нажатия на кнопку "=" */
+    /**
+     * обработка нажатия на кнопку "="
+     */
     public void actionPerformed(ActionEvent c) {
         DoCalc();
     }
 
-    /** обработка нажатия клавиши ENTER */
+    /**
+     * обработка нажатия клавиши ENTER
+     */
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_ENTER) {
             DoCalc();
@@ -90,5 +98,9 @@ public class Calculator extends JPanel implements ActionListener, KeyListener {
     }
 
     public void keyTyped(KeyEvent e) {
+    }
+
+    public void refreshLang(Localizer t) {
+        dc.refreshLang(t);
     }
 }

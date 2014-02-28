@@ -332,7 +332,7 @@ public class Trainer extends JApplet implements ActionListener,
     /** фрейм решения */
     public JInternalFrame solveFrame;
     /** фрейм решения */
-    public JInternalFrame helpFrame;
+    public MetalworksHelp helpFrame;
     /** фрейм тренажера */
     public JFrame frame;
     /** панель с закладками для шагов */
@@ -571,9 +571,8 @@ public class Trainer extends JApplet implements ActionListener,
         solveFrame.setVisible(false);
         solveFrame.addInternalFrameListener(this);
 
-        helpFrame = new MetalworksHelp(helpUrl);
+        helpFrame = new MetalworksHelp(localizer);
         desktopPane.add(helpFrame);
-        helpFrame.setTitle(localizer.getMessage("help.help.help"));
 
         // создаем панель для фрейма решения
         tabbedContent = new JPanel(new BorderLayout());
@@ -601,11 +600,23 @@ public class Trainer extends JApplet implements ActionListener,
         commandPanel.add(but);
 
         if (needL10N) { // if we need localization
+                        if (!hasEngVar) {
+
             if (cur_lang.equals(RUSSIAN_LANG)) {
                 but = createButton("task.switch.lang_ru");
             } else {
                 but = createButton("task.switch.lang_uk");
             }
+                        } else {
+                if (cur_lang.equals(UKR_LANG)) {
+                    but = createButton("task.switch.lang_uk");
+                } else if (cur_lang.equals(RUSSIAN_LANG)) {
+                    but = createButton("task.switch.lang_ru");
+                } else if (cur_lang.equals(ENG_LANG)) {
+                    but = createButton("task.switch.lang_en");
+                }
+            }
+
             langButton = but;
             but.setToolTipText(localizer.getMessage("cur_lang"));
             but.addActionListener(this);
@@ -631,6 +642,7 @@ public class Trainer extends JApplet implements ActionListener,
             pl.add(commandPanel);
             calculator = new Calculator();
             calculator.setTitle(localizer.getMessage("calculator.title"));
+            calculator.refreshLang(localizer);
             pl.add(calculator, "South");
             commandPanel = pl;
         }
@@ -666,6 +678,7 @@ public class Trainer extends JApplet implements ActionListener,
         icons.put("task.switch.lang", "ru.png");
         icons.put("task.switch.lang_ru", "ru.png");
         icons.put("task.switch.lang_uk", "ua.png");
+        icons.put("task.switch.lang_en", "en.png");
         icons.put("task.save", "filesave.gif");
         icons.put("math.abs", "abs.gif");
         icons.put("math.sqrt", "sqrt.gif");
@@ -852,27 +865,47 @@ public class Trainer extends JApplet implements ActionListener,
         helpFrame.setSize(600, 600);
         helpFrame.setVisible(true);
     }
+    
+    public boolean hasEngVar = false;
     private String cur_lang = RUSSIAN_LANG;
     public final static String RUSSIAN_LANG = "ru_RU";
     public final static String UKR_LANG = "uk_UA";
+    public final static String ENG_LANG = "en_EN";
+
 
     public void switchLang() {
         // if(!needL10N) return;
-        if (cur_lang.equals(UKR_LANG)) {
-            cur_lang = RUSSIAN_LANG;
+        if (!hasEngVar) {
+            if (cur_lang.equals(UKR_LANG)) {
+                cur_lang = RUSSIAN_LANG;
+            } else {
+                cur_lang = UKR_LANG;
+            }
         } else {
-            cur_lang = UKR_LANG;
+            if (cur_lang.equals(UKR_LANG)) {
+                cur_lang = RUSSIAN_LANG;
+            } else if (cur_lang.equals(RUSSIAN_LANG)) {
+                cur_lang = ENG_LANG;
+            } else {
+                cur_lang = UKR_LANG;
+            }
         }
+
         try {
             if (cur_lang.equals(UKR_LANG)) {
                 if (langButton != null) {
                     langButton.setIcon(new ImageIcon(getClass().getResource(
                             ICONS_PATH + icons.get("task.switch.lang_uk"))));
                 }
-            } else {
+            } else if (cur_lang.equals(RUSSIAN_LANG)) {
                 if (langButton != null) {
                     langButton.setIcon(new ImageIcon(getClass().getResource(
                             ICONS_PATH + icons.get("task.switch.lang_ru"))));
+                }
+            } else {
+                if (langButton != null) {
+                    langButton.setIcon(new ImageIcon(getClass().getResource(
+                            ICONS_PATH + icons.get("task.switch.lang_en"))));
                 }
             }
         } catch (Exception e) {
@@ -881,6 +914,11 @@ public class Trainer extends JApplet implements ActionListener,
 
         changeLanguage(cur_lang);
     }
+    
+    public void setNeedEngVar(boolean hasEngVar) {
+        this.hasEngVar = hasEngVar;
+    }
+
 
     class FrameToPaneButton extends JButton implements ActionListener {
 
@@ -1223,10 +1261,14 @@ public class Trainer extends JApplet implements ActionListener,
     }
 
     public void setCurLang(String curLang) {
-        if (!(curLang.equals(UKR_LANG) || curLang.equals(RUSSIAN_LANG))) {
+        if (!hasEngVar && (!(curLang.equals(UKR_LANG) || curLang.equals(RUSSIAN_LANG)))) {
             throw new WrongParameterException(curLang + " is not "
                     + RUSSIAN_LANG + " or " + UKR_LANG);
+        } else if (!hasEngVar && (!(curLang.equals(UKR_LANG) || curLang.equals(RUSSIAN_LANG) || curLang.equals(ENG_LANG)))) {
+            throw new WrongParameterException(curLang + " is not "
+                    + RUSSIAN_LANG + " or " + UKR_LANG + " or " + ENG_LANG);
         }
+
         cur_lang = curLang;
     }
     public Localizer localizer;
@@ -1246,7 +1288,7 @@ public class Trainer extends JApplet implements ActionListener,
         taskFrame.setTitle(localizer.getMessage("task.task"));
         solveFrame.setTitle(localizer.getMessage("task.solve"));
         ptfButton.setToolTipText(localizer.getMessage("task.to.frame"));
-        helpFrame.setTitle(localizer.getMessage("help.help.help"));
+        helpFrame.refreshLang(localizer);
         uslovie.refreshLanguage(localizer);
         dialogs.initBundle(localizer);
 
@@ -1261,6 +1303,7 @@ public class Trainer extends JApplet implements ActionListener,
         }
         if (calculator != null) {
             calculator.setTitle(localizer.getMessage("calculator.title"));
+            calculator.refreshLang(localizer);
         }
 
         //frame.setTitle(localizer.getMessage("taskname"));
@@ -1496,13 +1539,5 @@ public class Trainer extends JApplet implements ActionListener,
             System.out.println("Trainer.java:1372  -" + ex.getMessage());
         }
     }
-    private String helpUrl = "/edu/sumdu/dl/common/help/index.html";
 
-    public void setHelpUrl(String url) {
-        helpUrl = url;
-    }
-
-    public String getHelpUrl() {
-        return helpUrl;
-    }
 }

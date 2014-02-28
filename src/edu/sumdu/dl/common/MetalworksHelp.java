@@ -58,50 +58,59 @@ import java.awt.*;
 import java.net.URL;
 import java.net.MalformedURLException;
 import java.io.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.text.*;
 import javax.swing.event.*;
 import javax.swing.text.html.*;
+
 /*
  * @version 1.9 06/13/02
  * @author Steve Wilson
  */
 
-public class MetalworksHelp extends JInternalFrame {
+public class MetalworksHelp extends JInternalFrame implements TLocalized {
+    
+    private HtmlPane html;
 
-    public MetalworksHelp() {
-        this(HtmlPane.indexResource);
-    }
-
-    public MetalworksHelp(String s) {
+    public MetalworksHelp(Localizer localizer) {
 
         super("Help", true, true, true, true);
         setFrameIcon((Icon) UIManager.get("Tree.openIcon"));
         setBounds(200, 25, 400, 400);
-        HtmlPane html = new HtmlPane(s);
+        setTitle(localizer.getMessage("help.help.help"));
+        html = new HtmlPane(localizer.getMessage(HtmlPane.indexResourceKey));
         setContentPane(html);
         setDefaultCloseOperation(HIDE_ON_CLOSE);
+    }
+
+    @Override
+    public void refreshLang(Localizer t) {
+        setTitle(t.getMessage("help.help.help"));
+        try {
+            html.setPage(t.getMessage(HtmlPane.indexResourceKey));
+        } catch (IOException ex) {
+            System.err.println("Can't refresh help page");
+            ex.printStackTrace();
+        }
     }
 }
 
 class HtmlPane extends JScrollPane implements HyperlinkListener {
 
-    JEditorPane html;
-    static String indexResource = "/edu/sumdu/dl/editor/help/index.html";
+    private JEditorPane jpane;
+    protected static String indexResourceKey = "help.url.key";
 
-    public HtmlPane() {
-        this(indexResource);
-    }
-
-    public HtmlPane(String index) {
+    public HtmlPane(String page) {
         URL url = null;
         try {
 
-            url = getClass().getResource(index);
-            html = new JEditorPane();
-
+            url = getClass().getResource(page);
+            System.out.println("INIT: url: " + url + "  page: " + page);
+            jpane = new JEditorPane();
 
             //для уборки багов с версией 1.6.0_22 и выше
-            html.setEditorKit(new HTMLEditorKit() {
+            jpane.setEditorKit(new HTMLEditorKit() {
 
                 protected Parser getParser() {
                     try {
@@ -114,18 +123,28 @@ class HtmlPane extends JScrollPane implements HyperlinkListener {
                 }
             });
 
-
-            html.setPage(url);
-            html.setEditable(false);
-            html.addHyperlinkListener(this);
+            jpane.setPage(url);
+            jpane.setEditable(false);
+            jpane.addHyperlinkListener(this);
 
             JViewport vp = getViewport();
-            vp.add(html);
+            vp.add(jpane);
         } catch (MalformedURLException e) {
             System.out.println("Malformed URL: " + e + ":" + url);
         } catch (IOException e) {
             System.out.println("IOException: " + e + ":" + url);
         }
+        
+    }
+    
+    public JEditorPane getEditorPane() {
+        return jpane;
+    }
+    
+    public void setPage(String page) throws IOException {
+        URL url = getClass().getResource(page);
+        System.out.println("refreshLang: url: " + url + "  page: " + page);
+        getEditorPane().setPage(url);
     }
 
     /**
@@ -148,9 +167,9 @@ class HtmlPane extends JScrollPane implements HyperlinkListener {
      *            the URL to follow
      */
     protected void linkActivated(URL u) {
-        Cursor c = html.getCursor();
+        Cursor c = jpane.getCursor();
         Cursor waitCursor = Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR);
-        html.setCursor(waitCursor);
+        jpane.setCursor(waitCursor);
         SwingUtilities.invokeLater(new PageLoader(u, c));
     }
 
@@ -168,18 +187,18 @@ class HtmlPane extends JScrollPane implements HyperlinkListener {
         public void run() {
             if (url == null) {
                 // restore the original cursor
-                html.setCursor(cursor);
+                jpane.setCursor(cursor);
 
                 // PENDING(prinz) remove this hack when
                 // automatic validation is activated.
-                Container parent = html.getParent();
+                Container parent = jpane.getParent();
                 parent.repaint();
             } else {
-                Document doc = html.getDocument();
+                Document doc = jpane.getDocument();
                 try {
-                    html.setPage(url);
+                    jpane.setPage(url);
                 } catch (IOException ioe) {
-                    html.setDocument(doc);
+                    jpane.setDocument(doc);
                     getToolkit().beep();
                 } finally {
                     // schedule the cursor to revert after
