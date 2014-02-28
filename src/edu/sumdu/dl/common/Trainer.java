@@ -3,6 +3,12 @@ package edu.sumdu.dl.common;
 /*$Log: Trainer.java,v $*/
 
 /*
+ * Revision 3.0  2014/02/28 Parkhomchuk
+ * Added English localization.
+ * Corrected internal calculator - messages switch accordingly to the language
+ * Corrected help - added switching on different languages
+ */
+/*
  * Revision 2.9  2013/02/11 Parkhomchuk
  * Added support of CSS by <item> elements in <combobox> and <i18ncombobox> components
  */
@@ -372,7 +378,7 @@ public class Trainer extends JApplet implements ActionListener,
 
     private JLabel showResultLabel;
     private int importanceLevelSum = -1;
-    private final String workJarVers = "2.9 updated 2013/02/11";
+    private final String workJarVers = "3.0 updated 2014/02/28";
 
     /** установка начальных параметров */
     public void setSizes() {
