@@ -3,6 +3,11 @@ package edu.sumdu.dl.common;
 /*$Log: Trainer.java,v $*/
 
 /*
+ * Revision 3.0.1  2014/10/21 Kuzikov
+ * Fix java version checking (problem with java 1.8)
+ * Add missing resource (jupdate.png) 
+ */
+/*
  * Revision 3.0  2014/02/28 Parkhomchuk
  * Added English localization.
  * Corrected internal calculator - messages switch accordingly to the language
@@ -485,7 +490,11 @@ public class Trainer extends JApplet implements ActionListener,
 
         // сообщение об устаревшей версии java
         final String javaVersion = System.getProperty("java.version");
-        if (!(javaVersion.startsWith("1.6") || javaVersion.startsWith("1.7"))) {
+        if (!(javaVersion.startsWith("1.6") ||
+              javaVersion.startsWith("1.7") ||
+              javaVersion.startsWith("1.8") ||
+             )
+            ) {
             String versionMsg = localizer.getMessage("invalid.java.version") + javaVersion;
             JPanel pn = new JPanel(new FlowLayout());
             pn.setBackground(new Color(255, 204, 204));
