@@ -492,7 +492,7 @@ public class Trainer extends JApplet implements ActionListener,
         final String javaVersion = System.getProperty("java.version");
         if (!(javaVersion.startsWith("1.6") ||
               javaVersion.startsWith("1.7") ||
-              javaVersion.startsWith("1.8") ||
+              javaVersion.startsWith("1.8") 
              )
             ) {
             String versionMsg = localizer.getMessage("invalid.java.version") + javaVersion;
