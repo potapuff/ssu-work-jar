@@ -58,8 +58,7 @@ import java.awt.*;
 import java.net.URL;
 import java.net.MalformedURLException;
 import java.io.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import static javax.swing.WindowConstants.HIDE_ON_CLOSE;
 import javax.swing.text.*;
 import javax.swing.event.*;
 import javax.swing.text.html.*;
@@ -68,38 +67,69 @@ import javax.swing.text.html.*;
  * @version 1.9 06/13/02
  * @author Steve Wilson
  */
-
 public class MetalworksHelp extends JInternalFrame implements TLocalized {
-    
+
     private HtmlPane html;
+    private int refreshLangMode;
 
-    public MetalworksHelp(Localizer localizer) {
+    /** 
+     * While using this constructor, use refreshLang() method after object creation
+     * to fit the language to current localization
+     * @deprecated Constructor is not used in work.jar. Can be used in some particular apps
+     */
+    @Deprecated
+    public MetalworksHelp() {
+        this(HtmlPane.defaultPageRU);
+        refreshLangMode = 0;
+    }
 
+    public MetalworksHelp(String s) {
         super("Help", true, true, true, true);
         setFrameIcon((Icon) UIManager.get("Tree.openIcon"));
         setBounds(200, 25, 400, 400);
-        setTitle(localizer.getMessage("help.help.help"));
-        html = new HtmlPane(localizer.getMessage(HtmlPane.indexResourceKey));
+        html = new HtmlPane(s);
         setContentPane(html);
         setDefaultCloseOperation(HIDE_ON_CLOSE);
+        refreshLangMode = 1;
+    }
+
+    public MetalworksHelp(Localizer localizer) {
+        this(localizer.getMessage(HtmlPane.indexResourceKey));
+        setTitle(localizer.getMessage("help.help.help"));
+        refreshLangMode = 2;
     }
 
     @Override
     public void refreshLang(Localizer t) {
         setTitle(t.getMessage("help.help.help"));
         try {
-            html.setPage(t.getMessage(HtmlPane.indexResourceKey));
+            if (refreshLangMode == 0) {
+                String currentUrl = (t.getCurrentLanguage().equals(Trainer.RUSSIAN_LANG)) ? 
+                        HtmlPane.defaultPageRU : ((t.getCurrentLanguage().equals(Trainer.UKR_LANG)) ? 
+                        HtmlPane.defaultPageUA : HtmlPane.defaultPageEN);
+                html.setPage(currentUrl);
+            } else if (refreshLangMode == 2) {
+                html.setPage(t.getMessage(HtmlPane.indexResourceKey));
+            }
         } catch (IOException ex) {
             System.err.println("Can't refresh help page");
             ex.printStackTrace();
         }
     }
+    
 }
 
 class HtmlPane extends JScrollPane implements HyperlinkListener {
 
     private JEditorPane jpane;
-    protected static String indexResourceKey = "help.url.key";
+    public static String indexResourceKey = "help.url.key";
+    public static String defaultPageRU = "/edu/sumdu/dl/common/help/index_ru.html";
+    public static String defaultPageUA = "/edu/sumdu/dl/common/help/index_ua.html";
+    public static String defaultPageEN = "/edu/sumdu/dl/common/help/index_en.html";
+
+    public HtmlPane() {
+        this(defaultPageRU);
+    }
 
     public HtmlPane(String page) {
         URL url = null;
@@ -111,7 +141,6 @@ class HtmlPane extends JScrollPane implements HyperlinkListener {
 
             //для уборки багов с версией 1.6.0_22 и выше
             jpane.setEditorKit(new HTMLEditorKit() {
-
                 protected Parser getParser() {
                     try {
                         Class c = Class.forName("javax.swing.text.html.parser.ParserDelegator");
@@ -134,13 +163,13 @@ class HtmlPane extends JScrollPane implements HyperlinkListener {
         } catch (IOException e) {
             System.out.println("IOException: " + e + ":" + url);
         }
-        
+
     }
-    
+
     public JEditorPane getEditorPane() {
         return jpane;
     }
-    
+
     public void setPage(String page) throws IOException {
         URL url = getClass().getResource(page);
         System.out.println("refreshLang: url: " + url + "  page: " + page);
@@ -162,9 +191,8 @@ class HtmlPane extends JScrollPane implements HyperlinkListener {
      * an exception is thrown the original previous document is restored and a
      * beep sounded. If an attempt was made to follow a link, but it represented
      * a malformed url, this method will be called with a null argument.
-     * 
-     * @param u
-     *            the URL to follow
+     *
+     * @param u the URL to follow
      */
     protected void linkActivated(URL u) {
         Cursor c = jpane.getCursor();
