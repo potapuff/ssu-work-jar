@@ -89,14 +89,15 @@ public class FormulaRender extends JPanel implements
         new FDesc("cosec", FT.COSEC), new FDesc("sin", FT.SIN, true),
         new FDesc("cos", FT.COS, true), new FDesc("tg", FT.TAN, true),
         new FDesc("ctg", FT.COTAN, true), new FDesc("abs", FT.ABS),
-        new FDesc("exp", FT.EXP), new FDesc("d", FT.DIFFER, true),
+        new FDesc("exp", FT.EXP),
         new FDesc("part", FT.PARTIAL, true), new FDesc("not", FT.NOT),
         new FDesc("points", FT.POINTS), // points(f(x);a;b)
         new FDesc("int", FT.INTG), // int(x^3;2;10)
         new FDesc("limit", FT.LIMIT), // limit(x;0;x^2/sin(x))
         new FDesc("sum", FT.SUMMA), // sum(x;0;x^2/sin(x))
         new FDesc("root", FT.ROOT), // sum(x;0;x^2/sin(x))
-        new FDesc("diff", FT.DIFF) // diff(f(x)) diff(f(x);3) diff(f(x);3;x)
+        new FDesc("diff", FT.DIFF), // diff(f(x)) diff(f(x);3) diff(f(x);3;x)
+        new FDesc("d", FT.DIFFER, true)
     };
     String lastfun;
     char cur_tok;
