@@ -645,7 +645,6 @@ public class Trainer extends JApplet implements ActionListener,
         but.setActionCommand("Help");
         commandPanel.add(but);
 
-        //TODO vlpa
         if (needShowRes) {
             showResultLabel = new JLabel("", JLabel.CENTER);
             setResultLabel(trainerDoneValue);
@@ -695,6 +694,7 @@ public class Trainer extends JApplet implements ActionListener,
         icons.put("task.switch.lang_uk", "ua.png");
         icons.put("task.switch.lang_en", "en.png");
         icons.put("task.save", "filesave.gif");
+        icons.put("task.load", "load.png");
         icons.put("math.abs", "abs.gif");
         icons.put("math.sqrt", "sqrt.gif");
         icons.put("math.sqr", "sqr.gif");
@@ -1068,7 +1068,7 @@ public class Trainer extends JApplet implements ActionListener,
             map.put("java-version", System.getProperty("java.version"));
             map.put("java-vendor", System.getProperty("java.vendor"));
             map.put("work-jar-version", workJarVers);
-
+            
             String xmlDump = xmlEncode(map);
 
             URL next_try_url = new URL(getCodeBase(), getParameter("next_try_url"));
@@ -1110,7 +1110,7 @@ public class Trainer extends JApplet implements ActionListener,
                 bf.append("&step_image=");
                 bf.append(URLEncoder.encode(new String(Base64.encode(com.keypoint.PngEncoderB.dumpComponentImage(step[KS].getContent()))), "UTF8"));
             }
-
+          
             boolean done = false;
             do {
                 try {
