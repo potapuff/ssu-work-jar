@@ -3,6 +3,11 @@ package edu.sumdu.dl.common;
 /*$Log: Trainer.java,v $*/
 
 /*
+ * Revision 3.0.2  2016/10/10 Parkhomchuk
+ * Updated method getDependencyDataMap(). 
+ * Fixed link generation for dependent trainer if additional parameters exist in URL (e.g. sid).
+ */
+/*
  * Revision 3.0.1  2014/10/21 Kuzikov
  * Fix java version checking (problem with java 1.8)
  * Add missing resource (jupdate.png) 
@@ -1515,9 +1520,12 @@ public class Trainer extends JApplet implements ActionListener,
 
     public Map getDependencyDataMap(String depId) {
         try {
-            URL dep_url = new URL(getCodeBase(), getParameter("dependency_url")
-                    + "?depend=" + depId);
-            Object result = xmlDecode(dep_url.openStream());
+            String urlPath = getParameter("dependency_url")
+                + (getParameter("dependency_url").indexOf('?') > 0 ? "&depend=" : "?depend=")
+                + depId;
+            URL dependencyUrl = new URL(getCodeBase(), urlPath);
+            
+            Object result = xmlDecode(dependencyUrl.openStream());
             System.err.println(result);
             if (result instanceof Map) {
                 return (Map) result;
